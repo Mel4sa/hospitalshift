@@ -11,7 +11,7 @@ namespace hospitalautomation.Models.Context;
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
         {
-            const string connectionString = "server=localhost;port=3306;database=HospitalAutomation;user=mainroot;password=616161;Charset=utf8;";
+            const string connectionString = "server=localhost;port=3306;database=HospitalAutomation;user=root;password=melisa123!*;Charset=utf8;";
 
             optionsBuilder
                 .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
