@@ -9,9 +9,9 @@ namespace hospitalautomation.Models.Context;
 
     public class ApplicationDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) // Burda sadece user ve passwordunu değiştir o kadar 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
         {
-            const string connectionString = "server=localhost;port=3306;database=HospitalAutomation;user=root;password=0987654321;Charset=utf8;";
+            const string connectionString = "server=localhost;port=3306;database=HospitalAutomation;user=mainroot;password=616161;Charset=utf8;";
 
             optionsBuilder
                 .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
