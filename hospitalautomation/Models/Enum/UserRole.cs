@@ -10,6 +10,6 @@ namespace hospitalautomation.Models.Enum
         User,
         Assistant,
         Instructor,
-        Receptionist
+  
     }
 }
