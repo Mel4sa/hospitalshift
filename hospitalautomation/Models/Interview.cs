@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace hospitalautomation.Models
 {
-    public class Interview
+    public class Interview:BaseEntity
     {
-        [Key]
-        public int InterviewId { get; set; }
+
 
         public int AssistantId { get; set; }
         [ForeignKey("AsstiantId")]

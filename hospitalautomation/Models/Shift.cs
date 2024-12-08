@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace hospitalautomation.Models
 {
-    public class Shift
+    public class Shift : BaseEntity
     {
-        [Key]
-        public int ShiftId { get; set; }
+
 
 
         public int AssistantId { get; set; }
@@ -20,11 +19,11 @@ namespace hospitalautomation.Models
 
         [Required]
         [StringLength(50)]
-        public DateTime StartTime { get; set; } 
-        
+        public DateTime StartTime { get; set; }
+
         [Required]
         [StringLength(50)]
-        public DateTime EndTime { get; set; } 
+        public DateTime EndTime { get; set; }
 
         [Required]
         [StringLength(50)]

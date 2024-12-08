@@ -21,15 +21,22 @@ public class ApplicationDbContext : DbContext
                 warnings.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning);
             });
     }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-    public DbSet<Assistant> assistants { get; set; }
-    public DbSet<Instructor> ınstructors { get; set; }
-    public DbSet<Department> departments { get; set; }
-    public DbSet<Shift> shifts { get; set; }
-    public DbSet<Emergency> emergencies { get; set; }
-
-    public DbSet<Interview> ınterviews { get; set; }
-    public DbSet<User> users { get; set; }
-    public DbSet<MailEmergency> mailEmergencies { get; set; }
+        // User entity'sinin Role özelliğini string'e çevirmek için
+        modelBuilder.Entity<User>()
+            .Property(u => u.Role)
+            .HasConversion<string>();
+    }
+    public DbSet<Assistant> Assistants { get; set; }
+    public DbSet<Instructor> Instructors { get; set; }
+    public DbSet<Department> Departments { get; set; }
+    public DbSet<Shift> Shifts { get; set; }
+    public DbSet<Emergency> Emergencies { get; set; }
+    public DbSet<Interview> Interviews { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<MailEmergency> MailEmergencies { get; set; }
 }
 

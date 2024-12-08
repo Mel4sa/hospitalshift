@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace hospitalautomation.Models
 {
-    public class Assistant
+    public class Assistant:BaseEntity
     {
-        [Key]
-        public int AssistantId { get; set; }
+       
 
         [Required]
         [StringLength(50)]

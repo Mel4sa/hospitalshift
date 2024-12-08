@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using hospitalautomation.Models.Enum;
 
 namespace hospitalautomation.Models
 {
-    public class User
+    public class User : BaseEntity
     {
-        [Key]
-        public int UserId { get; set; }
+
 
 
         [Required]
@@ -19,5 +19,8 @@ namespace hospitalautomation.Models
         [Required]
         [StringLength(50)]
         public required string Password { get; set; }
+
+          [Required]
+        public UserRole Role { get; set; }   
     }
 }
