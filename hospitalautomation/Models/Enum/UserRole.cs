@@ -7,9 +7,8 @@ namespace hospitalautomation.Models.Enum
 {
     public enum UserRole
     {
-        User,
         Assistant,
         Instructor,
-  
+        Admin,
     }
 }

@@ -1,47 +1,47 @@
+@model hospitalautomation.Controllers.LoginViewModel
 @{
     Layout = null;
 }
-@model hospitalautomation.Controllers.LoginViewModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Admin Giriş";
 }
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
 
 <div
-    style="background-image: url('/images/background.jpg'); background-size: cover; background-position: left center; height: 100vh; display: flex; justify-content: flex-start; align-items: center; padding-left: 10%; padding-right: 10%;">
-    <!-- Login Formu -->
+    style="background: linear-gradient(to bottom, #f0f0f0, #e8e8e8); height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <!-- Admin Login Formu -->
     <div class="card p-4"
-        style="width: 100%; max-width: 400px; border: none; border-radius: 20px; background: rgba(255, 255, 255, 0.7);">
+        style="width: 100%; max-width: 400px; border: none; border-radius: 20px; background: rgba(255, 255, 255, 0.7); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
         <div class="card-body">
             <!-- Form Başlangıcı -->
-            <form method="post" asp-action="Login">
+            <form method="post" asp-action="LoginbyAdmin">
                 <div asp-validation-summary="All" class="text-danger"></div>
+
+                <!-- Admin Giriş -->
+                <div class="mb-4 text-center">
+                    <span style="font-size: 25px; font-weight: bold; color: transparent; background: linear-gradient(to left, #7a5baf, #4b8fe2); -webkit-background-clip: text; background-clip: text;">Admin Panel</span>
+                </div>
 
                 <!-- E-posta Alanı -->
                 <div class="mb-4">
-                    <label for="email" class="form-label" style="color: transparent; background: linear-gradient(to left, #00c6ff, #0072ff); -webkit-background-clip: text; background-clip: text;">Email</label>
+                    <label for="email" class="form-label" style="color: transparent; background: linear-gradient(to left, #7a5baf, #4b8fe2); -webkit-background-clip: text; background-clip: text;">Email</label>
                     <input type="email" class="form-control" id="email" name="Email" placeholder="Mailinizi giriniz" required 
                            style="border-radius: 20px; padding: 12px; border: none;" />
                 </div>
 
                 <!-- Şifre Alanı -->
                 <div class="mb-4">
-                    <label for="password" class="form-label" style="color: transparent; background: linear-gradient(to left, #00c6ff, #0072ff); -webkit-background-clip: text; background-clip: text;">Şifre</label>
+                    <label for="password" class="form-label" style="color: transparent; background: linear-gradient(to left, #7a5baf, #4b8fe2); -webkit-background-clip: text; background-clip: text;">Şifre</label>
                     <input type="password" class="form-control" id="password" name="Password" placeholder="Şifrenizi giriniz" required 
                            style="border-radius: 20px; padding: 12px; border: none;" />
                 </div>
 
                 <!-- Login Butonu -->
                 <button type="submit" class="btn btn-primary w-100 mt-4"
-                    style="border-radius: 25px; padding: 14px; font-weight: bold; background-color: #2575fc; border: none;">Giriş</button>
+                    style="border-radius: 25px; padding: 14px; font-weight: bold; background-color: #2575fc; border: none;">Admin Girişi</button>
 
-                <!-- Admin Giriş Butonu -->
-                <a asp-controller="Login" asp-action="AdminLogin"
-                   style="position: absolute; right: 50px; bottom: 10px; font-size: 14px; color: #0072ff; text-decoration: underline;">
-                   Admin Giriş
-                </a>
             </form>
 
             <!-- Bilgilendirme Mesajı -->
