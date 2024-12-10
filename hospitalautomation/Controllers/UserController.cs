@@ -26,7 +26,7 @@ namespace hospitalautomation.Controllers
         [HttpGet("create")]
         public IActionResult CreateUser()
         {
-            return View();
+            return View("Index");
         }
 
         [HttpPost("create")]
@@ -67,17 +67,17 @@ namespace hospitalautomation.Controllers
                         LastName = userDto.LastName,
                         Email = userDto.Email,
                         Address = userDto.Address,
-                        // DepartmentId vb. diğer alanları da ekleyebilirsiniz
+                        
                     };
                     _context.Instructors.Add(instructor);
                 }
 
                 await _context.SaveChangesAsync();
-
-                return RedirectToAction("Index"); // Başka bir sayfaya yönlendir
+                TempData["Message"] = "Başarılı!";
+                return RedirectToAction(); // Başka bir sayfaya yönlendir
             }
 
-            return View(userDto); // Eğer form geçerli değilse tekrar formu göster
+            return View("Index"); // Eğer form geçerli değilse tekrar formu göster
         }
     }
 }

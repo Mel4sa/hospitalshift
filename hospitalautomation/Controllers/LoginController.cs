@@ -53,7 +53,7 @@ namespace hospitalautomation.Controllers
 
         // Admin giriş sayfası (GET)
         [HttpGet]
-        public IActionResult AdminLogin()
+        public IActionResult LoginByAdmin()
         {
             // Admin login sayfasını döndür
             return View();
@@ -61,7 +61,7 @@ namespace hospitalautomation.Controllers
 
         // Admin giriş kontrolü (POST)
         [HttpPost]
-        public IActionResult LoginbyAdmin(LoginViewModel model)
+        public IActionResult LoginByAdmin(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace hospitalautomation.Controllers
                 }
             }
 
-            return View("AdminLogin", model);  // Admin giriş sayfasına geri döner
+            return View("LoginByAdmin", model);  // Admin giriş sayfasına geri döner
         }
     }
 

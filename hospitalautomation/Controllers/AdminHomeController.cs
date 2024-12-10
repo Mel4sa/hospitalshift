@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using hospitalautomation.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -13,18 +15,24 @@ namespace hospitalautomation.Controllers
             _logger = logger;
         }
 
-        // Admin Ana Sayfa (Index)
-        [HttpGet]
+        [HttpGet("")]
         public IActionResult Index()
         {
-            return View();  // Admin ana sayfasını döndürür
+            return View();
         }
 
-        // Hata Sayfası
+        [HttpGet("privacy")]
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+        
+        [HttpGet("error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View("Error");
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        
     }
 }

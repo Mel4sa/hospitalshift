@@ -11,29 +11,29 @@ namespace hospitalautomation.Models.Dtos
     {
         [Required]
         [StringLength(50)]
-        public string Email { get; set; }
+        public required string Email { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Password { get; set; }
+        public required string Password { get; set; }
 
         [Required]
         public UserRole Role { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string FirstName { get; set; }
+        public required string FirstName { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string LastName { get; set; }
+        public required string LastName { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Address { get; set; }
+        public required string Address { get; set; }
 
         [Required]
         [StringLength(11)]
-        public string TelNo { get; set; }
+        public required string TelNo { get; set; }
     }
 }
