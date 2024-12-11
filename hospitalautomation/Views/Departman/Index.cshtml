@@ -1,0 +1,172 @@
+@model hospitalautomation.Models.Dtos.UserDto
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- Custom CSS for Modern Modal Design -->
+<style>
+    /* Gradient text for modal title */
+    .modal-title {
+        background: linear-gradient(to right, #6a1b9a, #1e88e5); 
+        -webkit-background-clip: text;
+        color: transparent;
+        font-weight: bold;
+    }
+
+    /* Modal Body Styling */
+    .modal-body {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: #6a1b9a;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #6a1b9a;
+        box-shadow: 0 0 5px rgba(106, 27, 154, 0.5);
+    }
+
+    /* Düz Renkli Kaydet Butonu */
+    .btn-success {
+        background-color: #4caf50; /* Düz yeşil renk */
+        border: none;
+        border-radius: 25px;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #45a049; /* Hoverda biraz daha koyu yeşil */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Kart 1 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="..." class="card-img-top" alt="User Image">
+                <div class="card-body">
+                    <h5 class="card-title">Çocuk Acil</h5>
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal1">Detaylar</a>
+                </div>
+            </div>
+        </div>
+        <!-- Kart 2 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="..." class="card-img-top" alt="User Image">
+                <div class="card-body">
+                    <h5 class="card-title">Çocuk Yoğun Bakım</h5>
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal2">Detaylar</a>
+                </div>
+            </div>
+        </div>
+        <!-- Kart 3 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="..." class="card-img-top" alt="User Image">
+                <div class="card-body">
+                    <h5 class="card-title">Çocuk Hematolojisi ve Onkolojisi</h5>
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal3">Detaylar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 1 - Çocuk Acil -->
+<div class="modal fade" id="detailsModal1" tabindex="-1" aria-labelledby="detailsModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel1">Çocuk Acil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-3">
+                    <label for="emptyBeds1">Boş Yatak Sayısı</label>
+                    <input type="text" class="form-control" id="emptyBeds1" name="emptyBeds" placeholder="Boş Yatak Sayısını Girin">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="patientsCount1">Hasta Sayısı</label>
+                    <input type="text" class="form-control" id="patientsCount1" name="patientsCount" placeholder="Hasta Sayısını Girin">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="workingHoursStart1">Açık Olduğu Saatler (Başlangıç)</label>
+                    <input type="time" class="form-control" id="workingHoursStart1" name="workingHoursStart" placeholder="Başlangıç Saatini Girin">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="workingHoursEnd1">Açık Olduğu Saatler (Bitiş)</label>
+                    <input type="time" class="form-control" id="workingHoursEnd1" name="workingHoursEnd" placeholder="Bitiş Saatini Girin">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-success">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2 - Çocuk Yoğun Bakım -->
+<div class="modal fade" id="detailsModal2" tabindex="-1" aria-labelledby="detailsModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel2">Çocuk Yoğun Bakım</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-3">
+                    <label for="emptyBeds2">Boş Yatak Sayısı</label>
+                    <input type="text" class="form-control" id="emptyBeds2" name="emptyBeds" placeholder="Boş Yatak Sayısını Girin">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="patientsCount2">Hasta Sayısı</label>
+                    <input type="text" class="form-control" id="patientsCount2" name="patientsCount" placeholder="Hasta Sayısını Girin">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="workingHoursStart2">Açık Olduğu Saatler (Başlangıç)</label>
+                    <input type="time" class="form-control" id="workingHoursStart2" name="workingHoursStart" placeholder="Başlangıç Saatini Girin">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="workingHoursEnd2">Açık Olduğu Saatler (Bitiş)</label>
+                    <input type="time" class="form-control" id="workingHoursEnd2" name="workingHoursEnd" placeholder="Bitiş Saatini Girin">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-success">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 3 - Çocuk Hematolojisi ve Onkolojisi -->
+<div class="modal fade" id="detailsModal3" tabindex="-1" aria-labelledby="detailsModalLabel3" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel3">Çocuk Hematolojisi ve Onkolojisi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-3">
+                    <label for="emptyBeds3">Boş Yatak Sayısı</label>
+                    <input type="text" class="form-control" id="emptyBeds3" name="emptyBeds" placeholder="Boş Yatak Sayısını Girin">
+                </div
