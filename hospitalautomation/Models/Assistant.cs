@@ -20,7 +20,7 @@ namespace hospitalautomation.Models
 
         [Required]
         [StringLength(11)]
-        public int TelNo { get; set; }
+        public string TelNo { get; set; }
 
         [Required]
         [StringLength(50)]

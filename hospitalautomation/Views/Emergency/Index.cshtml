@@ -1,0 +1,101 @@
+@model hospitalautomation.Models.Dtos.UserDto
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    .form-label {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #6c757d;
+        transition: all 0.3s ease;
+    }
+
+    .form-label:hover {
+        color: #ff7e5f;
+        text-shadow: 0px 0px 5px rgba(255, 126, 95, 0.7);
+    }
+
+    .card-header {
+        background: linear-gradient(to right, #8B0000, #FF6347); /* Koyu kırmızıdan açık kırmızıya geçiş */
+        color: white;
+        padding: 20px;
+    }
+
+    .btn-danger {
+        background: linear-gradient(to right, #8B0000, #FF6347); /* Koyu kırmızıdan açık kırmızıya geçiş */
+        border-color: #8B0000;
+        color: white;
+        transition: background 0.3s ease;
+        border-radius: 10px;
+    }
+
+    .btn-danger:hover {
+        background: linear-gradient(to right, #FF6347, #8B0000); /* Hoverda renk geçişi tersine döner */
+        border-color: #FF6347;
+        color: white;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #ff7e5f;
+        box-shadow: 0 0 8px rgba(255, 126, 95, 0.5);
+    }
+
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <!-- Form Başlığı -->
+        <div class="card-header">
+            <h3 class="mb-0 text-center">Acil Durum Ekle</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/Emergency/Create">
+                <!-- Başlık Alanı -->
+                <div class="form-group">
+                    <label for="Title" class="form-label">Başlık</label>
+                    <input type="text" class="form-control" id="Title" name="Title" placeholder="Başlık giriniz" required>
+                </div>
+
+                <!-- İçerik Alanı -->
+                <div class="form-group">
+                    <label for="Content" class="form-label">İçerik</label>
+                    <textarea class="form-control" id="Content" name="Content" rows="4" placeholder="Acil durum açıklamasını giriniz" required></textarea>
+                </div>
+
+                <!-- Oluşturulma Tarihi -->
+                <div class="form-group">
+                    <label for="CreationDate" class="form-label">Oluşturulma Tarihi</label>
+                    <input type="date" class="form-control" id="CreationDate" name="CreationDate" required>
+                </div>
+
+                <!-- Oluşturulma Saati -->
+                <div class="form-group">
+                    <label for="CreationTime" class="form-label">Oluşturulma Saati</label>
+                    <input type="time" class="form-control" id="CreationTime" name="CreationTime" required>
+                </div>
+
+                <!-- Gönder Butonu -->
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-danger">Gönder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

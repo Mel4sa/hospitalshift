@@ -1,4 +1,4 @@
-@model hospitalautomation.Models.Dtos.UserDto
+@model IEnumerable<hospitalautomation.Models.Dtos.UserDto>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
@@ -9,7 +9,7 @@
 <style>
     /* Gradient Text Effect for labels */
     .gradient-text {
-        background: linear-gradient(to right, #6a1b9a, #1e88e5); 
+        background: linear-gradient(to right, #6a1b9a, #1e88e5);
         -webkit-background-clip: text;
         color: transparent;
     }
@@ -29,7 +29,8 @@
 
     /* Button styling for Create and Update (Blue gradient for create) */
     .btn-gradient-blue {
-        background: linear-gradient(45deg, #1e88e5, #6a1b9a); /* Gradient background */
+        background: linear-gradient(45deg, #1e88e5, #6a1b9a);
+        /* Gradient background */
         border: 1px solid transparent;
         color: white;
         font-weight: bold;
@@ -37,7 +38,8 @@
     }
 
     .btn-gradient-blue:hover {
-        background: linear-gradient(45deg, #1e88e5, #1565c0); /* Darker gradient on hover */
+        background: linear-gradient(45deg, #1e88e5, #1565c0);
+        /* Darker gradient on hover */
         border: 1px solid #1e88e5;
     }
 
@@ -67,37 +69,45 @@
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">Kullanıcı Ekle</button>
     </div>
 
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>İsim</th>
-                <th>Soyisim</th>
-                <th>Telefon</th>
-                <th>Email</th>
-                <th>Şifre</th>
-                <th>Adres</th>
-                <th>İşlemler</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 1; i <= 20; i++)
-            {
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
                 <tr>
-                    <td>İsim @i</td>
-                    <td>User Name @i</td>
-                    <td>+90 5XX XXX XX XX</td>
-                    <td>user@domain.com</td>
-                    <td>@(i % 2 == 0 ? "Instructor" : "Assistant")</td>
-                    <td>Adres bilgisi burada olacak</td>
-                    <td>
-                       
-                        <button class="btn btn-sm btn-update">Güncelle</button>
-                        <button class="btn btn-sm btn-danger">Sil</button>
-                    </td>
+                    <th>İsim</th>
+                    <th>Soyisim</th>
+                    <th>Telefon</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Adres</th>
+                    <th>İşlemler</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.TelNo</td>
+                        <td>@user.Email</td>
+                        <td>@user.Role</td>
+                        <td>@user.Address</td>
+                        <td>
+                            
+                            <button class="btn btn-sm btn-danger">Sil</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            Henüz kullanıcı bulunmamaktadır.
+        </div>
+    }
 </div>
 
 <!-- Modal -->
@@ -109,6 +119,15 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <p>@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
                 <form asp-action="CreateUser" method="post">
                     <div class="form-group mb-3">
                         <label for="Email" class="gradient-text">Email</label>
@@ -121,9 +140,9 @@
                     <div class="form-group mb-3">
                         <label for="Role" class="gradient-text">Rol</label>
                         <select class="form-control" id="Role" name="Role" required>
-                            <option value="0">Rol Seçin</option>
-                            <option value="1">Asistan</option>
-                            <option value="2">Öğrenim Üyesi</option>
+                            <option value="20">Rol Seçin</option>
+                            <option value="0">Asistan</option>
+                            <option value="1">Öğrenim Üyesi</option>
                         </select>
                     </div>
                     <div class="form-group mb-3">
@@ -140,7 +159,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="TelNo" class="gradient-text">Telefon Numarası</label>
-                        <input type="text" class="form-control" id="TelNo" name="TelNo" required />
+                        <input type="number" class="form-control" id="TelNo" name="TelNo" required />
                     </div>
                     <button type="submit" class="btn btn-gradient-blue">Kullanıcı Oluştur</button>
                 </form>

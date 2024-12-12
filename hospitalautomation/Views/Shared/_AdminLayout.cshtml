@@ -101,9 +101,9 @@
             </div>
             <a href="@Url.Action("Index", "User")">Kullanıcı Yönetimi</a>
             <a href="@Url.Action("Index", "Departman")">Bölüm Yönetimi</a>
-            <a href="/adminhome/schedule">Takvim ve Nöbetler</a>
-            <a href="/adminhome/appointments">Randevu Yönetimi</a>
-            <a href="/adminhome/emergency">Acil Durumlar</a>
+            <a href="@Url.Action("Index", "Shift")"> Nöbet Yönetimi</a>
+            <a href="@Url.Action("Index", "Interview")">Randevu Yönetimi</a>
+          <a href="@Url.Action("Index", "Emergency")">Acil Durumlar</a>
         </div>
         <!-- Çıkış Butonu -->
         <a href="@Url.Action("LoginByAdmin", "Login")" class="logout-btn">

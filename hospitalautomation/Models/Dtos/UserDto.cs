@@ -1,39 +1,38 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using hospitalautomation.Models.Enum;
 
 namespace hospitalautomation.Models.Dtos
 {
     public class UserDto
     {
-        [Required]
-        [StringLength(50)]
-        public required string Email { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public required string Password { get; set; }
+        public int Id { get; set; }
+        
+        [Required(ErrorMessage = "Email alanı zorunludur.")]
+        [StringLength(50, ErrorMessage = "Email en fazla 50 karakter olabilir.")]
+        [EmailAddress(ErrorMessage = "Geçerli bir email adresi giriniz.")]
+        public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Şifre alanı zorunludur.")]
+        [StringLength(50, MinimumLength = 6, ErrorMessage = "Şifre en az 6, en fazla 50 karakter olmalıdır.")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Rol alanı zorunludur.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Geçerli bir rol seçiniz.")]
         public UserRole Role { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public required string FirstName { get; set; }
+        [StringLength(50, ErrorMessage = "Ad en fazla 50 karakter olabilir.")]
+        public string FirstName { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public required string LastName { get; set; }
+        [StringLength(50, ErrorMessage = "Soyad en fazla 50 karakter olabilir.")]
+        public string LastName { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public required string Address { get; set; }
+        [StringLength(100, ErrorMessage = "Adres en fazla 100 karakter olabilir.")]
+        public string Address { get; set; }
 
-        [Required]
-        [StringLength(11)]
-        public required string TelNo { get; set; }
+        [Required(ErrorMessage = "Telefon numarası zorunludur.")]
+        [StringLength(15, ErrorMessage = "Telefon numarası en fazla 15 karakter olabilir.")]
+        public string TelNo { get; set; }
     }
 }
