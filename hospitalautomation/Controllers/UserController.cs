@@ -43,11 +43,15 @@ namespace hospitalautomation.Controllers
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
+                // Kaydedilen kullanıcı ID'sini alıyoruz
+                var userId = user.Id;
+
                 // Role'e göre veri ekleme işlemi
                 if (user.Role == UserRole.Assistant)
                 {
                     var assistant = new Assistant
                     {
+                        UserId = userId, // User tablosundan gelen ID
                         FirstName = userDto.FirstName,
                         LastName = userDto.LastName,
                         Email = userDto.Email,
@@ -60,6 +64,7 @@ namespace hospitalautomation.Controllers
                 {
                     var instructor = new Instructor
                     {
+                        UserId = userId, // User tablosundan gelen ID
                         FirstName = userDto.FirstName,
                         LastName = userDto.LastName,
                         Email = userDto.Email,
@@ -71,8 +76,9 @@ namespace hospitalautomation.Controllers
 
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Başarılı!";
-                return RedirectToAction(); // Başka bir sayfaya yönlendir
+                return RedirectToAction("Index"); // Başka bir sayfaya yönlendir
             }
+
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
@@ -83,117 +89,69 @@ namespace hospitalautomation.Controllers
             }
             return View("Index"); // Eğer form geçerli değilse tekrar formu göster
         }
-
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             var users = await _context.Users
                     .Where(user => user.Role != UserRole.Admin && !user.IsDeleted)
-                    .ToListAsync(); var userDtos = users.Select(user => new UserDto
-                    {
-                        Email = user.Email,
-                        Role = user.Role,
-                        Password = user.Password,
-                        FirstName = user.Role == UserRole.Assistant
-                                ? _context.Assistants.FirstOrDefault(a => a.Email == user.Email)?.FirstName
-                                : _context.Instructors.FirstOrDefault(i => i.Email == user.Email)?.FirstName,
-                        LastName = user.Role == UserRole.Assistant
-                                ? _context.Assistants.FirstOrDefault(a => a.Email == user.Email)?.LastName
-                                : _context.Instructors.FirstOrDefault(i => i.Email == user.Email)?.LastName,
-                        Address = user.Role == UserRole.Assistant
-                                ? _context.Assistants.FirstOrDefault(a => a.Email == user.Email)?.Address
-                                : _context.Instructors.FirstOrDefault(i => i.Email == user.Email)?.Address,
-                        TelNo = user.Role == UserRole.Assistant
-                                ? _context.Assistants.FirstOrDefault(a => a.Email == user.Email)?.TelNo
-                                : _context.Instructors.FirstOrDefault(i => i.Email == user.Email)?.TelNo,
-                    }).ToList();
+                    .ToListAsync();
 
-            return View(userDtos); // UserDto türünde model gönderiliyor.
-        }
-        [HttpGet("update/{id}")]
-        public async Task<IActionResult> UpdateUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var userDto = new UserDto
+            var userDtos = users.Select(user => new UserDto
             {
                 Id = user.Id,
                 Email = user.Email,
                 Role = user.Role,
+                Password = user.Password,
                 FirstName = user.Role == UserRole.Assistant
-                    ? _context.Assistants.FirstOrDefault(a => a.Email == user.Email)?.FirstName
-                    : _context.Instructors.FirstOrDefault(i => i.Email == user.Email)?.FirstName,
+                        ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.FirstName
+                        : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.FirstName,
                 LastName = user.Role == UserRole.Assistant
-                    ? _context.Assistants.FirstOrDefault(a => a.Email == user.Email)?.LastName
-                    : _context.Instructors.FirstOrDefault(i => i.Email == user.Email)?.LastName,
+                        ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.LastName
+                        : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.LastName,
                 Address = user.Role == UserRole.Assistant
-                    ? _context.Assistants.FirstOrDefault(a => a.Email == user.Email)?.Address
-                    : _context.Instructors.FirstOrDefault(i => i.Email == user.Email)?.Address,
+                        ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.Address
+                        : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.Address,
                 TelNo = user.Role == UserRole.Assistant
-                    ? _context.Assistants.FirstOrDefault(a => a.Email == user.Email)?.TelNo
-                    : _context.Instructors.FirstOrDefault(i => i.Email == user.Email)?.TelNo,
-            };
+                        ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.TelNo
+                        : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.TelNo,
+            }).ToList();
 
-            return PartialView("_UpdateUserModal", userDto);
+            return View(userDtos); // UserDto türünde model gönderiliyor.
         }
-
-        [HttpPost("update/{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateUser(int id, UserDto userDto)
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteUser(int userId)
         {
-            if (ModelState.IsValid)
+            var user = await _context.Users.FindAsync(userId);
+            if (user != null)
             {
-                var user = await _context.Users.FindAsync(id);
-                if (user == null)
+                // Kullanıcıyı pasif yap (IsDeleted = true)
+                user.IsDeleted = true;
+
+                // Assistants tablosunda kullanıcıya ait veriyi güncelle
+                var assistants = _context.Assistants.Where(a => a.UserId == userId);
+                foreach (var assistant in assistants)
                 {
-                    return NotFound();
+                    assistant.IsDeleted = true;
                 }
 
-                user.Email = userDto.Email;
-                user.Role = userDto.Role;
-                user.Password = userDto.Password;
-
-                if (user.Role == UserRole.Assistant)
+                // Instructors tablosunda kullanıcıya ait veriyi güncelle
+                var instructors = _context.Instructors.Where(i => i.UserId == userId);
+                foreach (var instructor in instructors)
                 {
-                    var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.Email == user.Email);
-                    if (assistant != null)
-                    {
-                        assistant.FirstName = userDto.FirstName;
-                        assistant.LastName = userDto.LastName;
-                        assistant.Address = userDto.Address;
-                        assistant.TelNo = userDto.TelNo;
-                    }
-                }
-                else if (user.Role == UserRole.Instructor)
-                {
-                    var instructor = await _context.Instructors.FirstOrDefaultAsync(i => i.Email == user.Email);
-                    if (instructor != null)
-                    {
-                        instructor.FirstName = userDto.FirstName;
-                        instructor.LastName = userDto.LastName;
-                        instructor.Address = userDto.Address;
-                        instructor.TelNo = userDto.TelNo;
-                    }
+                    instructor.IsDeleted = true;
                 }
 
+                // Veritabanındaki değişiklikleri kaydet
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Güncelleme başarılı!";
-                return RedirectToAction("Index");
-            }
- if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                foreach (var error in errors)
-                {
-                    Console.WriteLine(error); // Veya loglama yapabilirsiniz
-                }
-            }
-            return View("Index");
-        }
 
+                TempData["Message"] = "Kullanıcı başarıyla silindi!";
+            }
+            else
+            {
+                TempData["Error"] = "Kullanıcı bulunamadı!";
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

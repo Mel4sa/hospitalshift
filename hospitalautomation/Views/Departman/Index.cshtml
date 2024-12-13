@@ -4,18 +4,16 @@
 }
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-<!-- Custom CSS for Modern Modal Design -->
 <style>
-    /* Gradient text for modal title */
     .modal-title {
-        background: linear-gradient(to right, #6a1b9a, #1e88e5); 
+        background: linear-gradient(to right, #6a1b9a, #1e88e5);
         -webkit-background-clip: text;
         color: transparent;
         font-weight: bold;
     }
 
-    /* Modal Body Styling */
     .modal-body {
         background-color: #f9f9f9;
         border-radius: 10px;
@@ -39,9 +37,8 @@
         box-shadow: 0 0 5px rgba(106, 27, 154, 0.5);
     }
 
-    /* Düz Renkli Kaydet Butonu */
     .btn-success {
-        background-color: #4caf50; /* Düz yeşil renk */
+        background-color: #4caf50;
         border: none;
         border-radius: 25px;
         color: white;
@@ -49,39 +46,60 @@
     }
 
     .btn-success:hover {
-        background-color: #45a049; /* Hoverda biraz daha koyu yeşil */
+        background-color: #45a049;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+        text-align: center;
+        padding: 2rem;
+        background-color: #f8f9fa;
+    }
+
+    .card-img-top i {
+        font-size: 60px;
     }
 </style>
 
-<div class="container mt-5">
-    <div class="row">
+<div class="container d-flex align-items-center justify-content-center vh-100">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         <!-- Kart 1 -->
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <img src="..." class="card-img-top" alt="User Image">
-                <div class="card-body">
+        <div class="col">
+            <div class="card h-100 shadow-lg" style="border-radius: 15px;">
+                <div class="card-body text-center">
+                    <div class="card-icon mb-3">
+                        <i class="bi bi-hospital-fill" style="font-size: 3rem; color: #1e88e5;"></i>
+                    </div>
                     <h5 class="card-title">Çocuk Acil</h5>
+                    <p class="card-text text-muted">Acil müdahale gerektiren durumlar için hizmet veren birim.</p>
                     <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal1">Detaylar</a>
                 </div>
             </div>
         </div>
+
         <!-- Kart 2 -->
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <img src="..." class="card-img-top" alt="User Image">
-                <div class="card-body">
+        <div class="col">
+            <div class="card h-100 shadow-lg" style="border-radius: 15px;">
+                <div class="card-body text-center">
+                    <div class="card-icon mb-3">
+                        <i class="bi bi-heart-pulse-fill" style="font-size: 3rem; color: #e53935;"></i>
+                    </div>
                     <h5 class="card-title">Çocuk Yoğun Bakım</h5>
+                    <p class="card-text text-muted">Yoğun bakım gerektiren çocuk hastalar için özel birim.</p>
                     <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal2">Detaylar</a>
                 </div>
             </div>
         </div>
+
         <!-- Kart 3 -->
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <img src="..." class="card-img-top" alt="User Image">
-                <div class="card-body">
+        <div class="col">
+            <div class="card h-100 shadow-lg" style="border-radius: 15px;">
+                <div class="card-body text-center">
+                    <div class="card-icon mb-3">
+                        <i class="bi bi-person-fill" style="font-size: 3rem; color: #6a1b9a;"></i>
+                    </div>
                     <h5 class="card-title">Çocuk Hematolojisi ve Onkolojisi</h5>
+                    <p class="card-text text-muted">Kan hastalıkları ve onkoloji alanında uzmanlaşmış birim.</p>
                     <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal3">Detaylar</a>
                 </div>
             </div>
@@ -89,7 +107,7 @@
     </div>
 </div>
 
-<!-- Modal 1 - Çocuk Acil -->
+<!-- Modal 1 -->
 <div class="modal fade" id="detailsModal1" tabindex="-1" aria-labelledby="detailsModalLabel1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -122,6 +140,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Modal 2 - Çocuk Yoğun Bakım -->
 <div class="modal fade" id="detailsModal2" tabindex="-1" aria-labelledby="detailsModalLabel2" aria-hidden="true">
@@ -169,4 +188,4 @@
                 <div class="form-group mb-3">
                     <label for="emptyBeds3">Boş Yatak Sayısı</label>
                     <input type="text" class="form-control" id="emptyBeds3" name="emptyBeds" placeholder="Boş Yatak Sayısını Girin">
-                </div
+                </div>

@@ -7,30 +7,30 @@ using System.Threading.Tasks;
 
 namespace hospitalautomation.Models
 {
-    public class Instructor:BaseEntity
-    {
-       
-        public int DepartmantId { get; set; }
-        [ForeignKey("DepartmentId")]
+    public class Instructor : BaseEntity
+{
+    public int UserId { get; set; }
+    [ForeignKey("UserId")]
+    public User User { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public required string FirstName { get; set; }
+    [Required]
+    [StringLength(50)]
+    public required string FirstName { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public required string LastName { get; set; }
+    [Required]
+    [StringLength(50)]
+    public required string LastName { get; set; }
 
-        [Required]
-        [StringLength(11)]
-        public string TelNo { get; set; }
+    [Required]
+    [StringLength(11)]
+    public string TelNo { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public required string Email { get; set; }
+    [Required]
+    [StringLength(50)]
+    public required string Email { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public required string Address { get; set; }
-    }
+    [Required]
+    [StringLength(50)]
+    public required string Address { get; set; }
+}
 }

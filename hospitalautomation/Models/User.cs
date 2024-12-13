@@ -5,13 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using hospitalautomation.Models.Enum;
 
-namespace hospitalautomation.Models
-{
+namespace hospitalautomation.Models;
+
     public class User : BaseEntity
     {
-
-
-
         [Required]
         [StringLength(50)]
         public required string Email { get; set; }
@@ -20,7 +17,6 @@ namespace hospitalautomation.Models
         [StringLength(50)]
         public required string Password { get; set; }
 
-          [Required]
+        [Required]
         public UserRole Role { get; set; }   
     }
-}
