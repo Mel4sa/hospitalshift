@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hospitalautomation.Models.Context;
 
@@ -10,9 +11,11 @@ using hospitalautomation.Models.Context;
 namespace hospitalautomation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241214140040_Mig")]
+    partial class Mig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,26 +266,25 @@ namespace hospitalautomation.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int>("DepartmantId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
+                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("ShiftDate")
+                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("StartTime")
+                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AssistantId");
-
-                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Shifts");
                 });
@@ -338,25 +340,6 @@ namespace hospitalautomation.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("hospitalautomation.Models.Shift", b =>
-                {
-                    b.HasOne("hospitalautomation.Models.Assistant", "Assistant")
-                        .WithMany()
-                        .HasForeignKey("AssistantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("hospitalautomation.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Assistant");
-
-                    b.Navigation("Department");
                 });
 #pragma warning restore 612, 618
         }

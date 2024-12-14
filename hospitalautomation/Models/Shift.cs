@@ -1,33 +1,30 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace hospitalautomation.Models
 {
     public class Shift : BaseEntity
     {
-
-
-
+        [Required]
         public int AssistantId { get; set; }
-        [ForeignKey("AsistantId")]
-        public int DepartmantId { get; set; }
-        [ForeignKey("DepartmentId")]
+
+        [ForeignKey(nameof(AssistantId))]
+        public Assistant Assistant { get; set; }
 
         [Required]
-        [StringLength(50)]
+        public int DepartmentId { get; set; }
+
+        [ForeignKey(nameof(DepartmentId))]
+        public Department Department { get; set; }
+
+        [Required]
+        public DateTime ShiftDate { get; set; }
+
+        [Required]
         public DateTime StartTime { get; set; }
 
         [Required]
-        [StringLength(50)]
         public DateTime EndTime { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public DateTime ShiftDate { get; set; }
-
     }
 }

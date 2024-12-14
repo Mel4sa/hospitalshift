@@ -47,7 +47,7 @@ namespace hospitalautomation.Controllers
                 var userId = user.Id;
 
                 // Role'e göre veri ekleme işlemi
-                if (user.Role == UserRole.Assistant)
+                if (user.Role == UserRole.Asistan)
                 {
                     var assistant = new Assistant
                     {
@@ -60,7 +60,7 @@ namespace hospitalautomation.Controllers
                     };
                     _context.Assistants.Add(assistant);
                 }
-                else if (user.Role == UserRole.Instructor)
+                else if (user.Role == UserRole.ÖğretimÜyesi)
                 {
                     var instructor = new Instructor
                     {
@@ -102,16 +102,16 @@ namespace hospitalautomation.Controllers
                 Email = user.Email,
                 Role = user.Role,
                 Password = user.Password,
-                FirstName = user.Role == UserRole.Assistant
+                FirstName = user.Role == UserRole.Asistan
                         ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.FirstName
                         : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.FirstName,
-                LastName = user.Role == UserRole.Assistant
+                LastName = user.Role == UserRole.Asistan
                         ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.LastName
                         : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.LastName,
-                Address = user.Role == UserRole.Assistant
+                Address = user.Role == UserRole.Asistan
                         ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.Address
                         : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.Address,
-                TelNo = user.Role == UserRole.Assistant
+                TelNo = user.Role == UserRole.Asistan
                         ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.TelNo
                         : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.TelNo,
             }).ToList();
@@ -163,7 +163,7 @@ namespace hospitalautomation.Controllers
             }
 
             // Role'e göre veri al
-            if (user.Role == UserRole.Assistant)
+            if (user.Role == UserRole.Asistan)
             {
                 var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.UserId == userId);
                 if (assistant == null) return NotFound("Kullanıcı detayları bulunamadı.");
@@ -179,7 +179,7 @@ namespace hospitalautomation.Controllers
                     assistant.TelNo
                 });
             }
-            else if (user.Role == UserRole.Instructor)
+            else if (user.Role == UserRole.ÖğretimÜyesi)
             {
                 var instructor = await _context.Instructors.FirstOrDefaultAsync(i => i.UserId == userId);
                 if (instructor == null) return NotFound("Kullanıcı detayları bulunamadı.");
@@ -215,7 +215,7 @@ namespace hospitalautomation.Controllers
             user.Role = userDto.Role;
 
             // Role'e göre tablo güncelle
-            if (user.Role == UserRole.Assistant)
+            if (user.Role == UserRole.Asistan)
             {
                 var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.UserId == userDto.Id);
                 if (assistant != null)
@@ -226,7 +226,7 @@ namespace hospitalautomation.Controllers
                     assistant.TelNo = userDto.TelNo;
                 }
             }
-            else if (user.Role == UserRole.Instructor)
+            else if (user.Role == UserRole.ÖğretimÜyesi)
             {
                 var instructor = await _context.Instructors.FirstOrDefaultAsync(i => i.UserId == userDto.Id);
                 if (instructor != null)

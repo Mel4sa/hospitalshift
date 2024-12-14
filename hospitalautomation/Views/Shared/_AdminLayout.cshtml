@@ -97,9 +97,11 @@
     <!-- Sol Dikey Navbar -->
     <div class="sidebar">
         <div>
-            <div class="header">
-                <h4>Admin Paneli</h4>
-            </div>
+
+
+ <a href="@Url.Action("Index", "AdminHome")" style="text-decoration: none; color: white;">
+        <h4 style="text-decoration: none; color: white; display: block; text-align: center; padding-left: 15px;">Ana Sayfa</h4>
+    </a>
             <a href="@Url.Action("Index", "User")">Kullanıcı Yönetimi</a>
             <a href="@Url.Action("Index", "Departman")">Bölüm Yönetimi</a>
             <a href="@Url.Action("Index", "Shift")"> Nöbet Yönetimi</a>
