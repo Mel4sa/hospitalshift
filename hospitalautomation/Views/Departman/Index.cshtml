@@ -72,7 +72,7 @@
                     </div>
                     <h5 class="card-title">Çocuk Acil</h5>
                     <p class="card-text text-muted">Acil müdahale gerektiren durumlar için hizmet veren birim.</p>
-                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal1">Detaylar</a>
+                    <a href="#" class="btn btn-primary" onclick="openModal('detailsModal1','Çocuk Acil')">Detaylar</a>
                 </div>
             </div>
         </div>
@@ -86,7 +86,8 @@
                     </div>
                     <h5 class="card-title">Çocuk Yoğun Bakım</h5>
                     <p class="card-text text-muted">Yoğun bakım gerektiren çocuk hastalar için özel birim.</p>
-                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal2">Detaylar</a>
+                    <a href="#" class="btn btn-primary" onclick="openModal('detailsModal2','Çocuk Yoğun Bakım')">Detaylar</a>
+
                 </div>
             </div>
         </div>
@@ -100,92 +101,223 @@
                     </div>
                     <h5 class="card-title">Çocuk Hematolojisi ve Onkolojisi</h5>
                     <p class="card-text text-muted">Kan hastalıkları ve onkoloji alanında uzmanlaşmış birim.</p>
-                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal3">Detaylar</a>
+                    <a href="#" class="btn btn-primary" onclick="openModal('detailsModal3','Çocuk Hematolojisi ve Onkolojisi')">Detaylar</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal 1 -->
 <div class="modal fade" id="detailsModal1" tabindex="-1" aria-labelledby="detailsModalLabel1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel1">Çocuk Acil</h5>
+                <h5 class="modal-title" id="detailsModalLabel1">Çocuk Acil</h5> <!-- Departman İsmi -->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group mb-3">
                     <label for="emptyBeds1">Boş Yatak Sayısı</label>
-                    <input type="text" class="form-control" id="emptyBeds1" name="emptyBeds" placeholder="Boş Yatak Sayısını Girin">
+                    <input type="text" class="form-control" id="emptyBeds1" name="emptyBeds"
+                        placeholder="Boş Yatak Sayısını Girin">
                 </div>
                 <div class="form-group mb-3">
                     <label for="patientsCount1">Hasta Sayısı</label>
-                    <input type="text" class="form-control" id="patientsCount1" name="patientsCount" placeholder="Hasta Sayısını Girin">
+                    <input type="text" class="form-control" id="patientsCount1" name="patientsCount"
+                        placeholder="Hasta Sayısını Girin">
                 </div>
                 <div class="form-group mb-3">
                     <label for="workingHoursStart1">Açık Olduğu Saatler (Başlangıç)</label>
-                    <input type="time" class="form-control" id="workingHoursStart1" name="workingHoursStart" placeholder="Başlangıç Saatini Girin">
+                    <input type="time" class="form-control" id="workingHoursStart1" name="workingHoursStart"
+                        placeholder="Başlangıç Saatini Girin">
                 </div>
                 <div class="form-group mb-3">
                     <label for="workingHoursEnd1">Açık Olduğu Saatler (Bitiş)</label>
-                    <input type="time" class="form-control" id="workingHoursEnd1" name="workingHoursEnd" placeholder="Bitiş Saatini Girin">
+                    <input type="time" class="form-control" id="workingHoursEnd1" name="workingHoursEnd"
+                        placeholder="Bitiş Saatini Girin">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-success">Kaydet</button>
+                <button type="button" class="btn btn-success"
+                    onclick="saveDepartment('detailsModal1', 1)">Kaydet</button>
             </div>
+            <div class="container mt-4">
+    <!-- Hata Mesajı -->
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <!-- Başarı Mesajı -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+</div>
+
+<!-- Geri kalan HTML kodlar -->
+
         </div>
     </div>
 </div>
 
-
-<!-- Modal 2 - Çocuk Yoğun Bakım -->
 <div class="modal fade" id="detailsModal2" tabindex="-1" aria-labelledby="detailsModalLabel2" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel2">Çocuk Yoğun Bakım</h5>
+                <h5 class="modal-title" id="detailsModalLabel2">Çocuk Yoğun Bakım</h5> <!-- Departman İsmi -->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group mb-3">
-                    <label for="emptyBeds2">Boş Yatak Sayısı</label>
-                    <input type="text" class="form-control" id="emptyBeds2" name="emptyBeds" placeholder="Boş Yatak Sayısını Girin">
+                    <label for="emptyBeds1">Boş Yatak Sayısı</label>
+                    <input type="text" class="form-control" id="emptyBeds1" name="emptyBeds"
+                        placeholder="Boş Yatak Sayısını Girin">
                 </div>
                 <div class="form-group mb-3">
-                    <label for="patientsCount2">Hasta Sayısı</label>
-                    <input type="text" class="form-control" id="patientsCount2" name="patientsCount" placeholder="Hasta Sayısını Girin">
+                    <label for="patientsCount1">Hasta Sayısı</label>
+                    <input type="text" class="form-control" id="patientsCount1" name="patientsCount"
+                        placeholder="Hasta Sayısını Girin">
                 </div>
                 <div class="form-group mb-3">
-                    <label for="workingHoursStart2">Açık Olduğu Saatler (Başlangıç)</label>
-                    <input type="time" class="form-control" id="workingHoursStart2" name="workingHoursStart" placeholder="Başlangıç Saatini Girin">
+                    <label for="workingHoursStart1">Açık Olduğu Saatler (Başlangıç)</label>
+                    <input type="time" class="form-control" id="workingHoursStart1" name="workingHoursStart"
+                        placeholder="Başlangıç Saatini Girin">
                 </div>
                 <div class="form-group mb-3">
-                    <label for="workingHoursEnd2">Açık Olduğu Saatler (Bitiş)</label>
-                    <input type="time" class="form-control" id="workingHoursEnd2" name="workingHoursEnd" placeholder="Bitiş Saatini Girin">
+                    <label for="workingHoursEnd1">Açık Olduğu Saatler (Bitiş)</label>
+                    <input type="time" class="form-control" id="workingHoursEnd1" name="workingHoursEnd"
+                        placeholder="Bitiş Saatini Girin">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-success">Kaydet</button>
+                <button type="button" class="btn btn-success"
+                    onclick="saveDepartment('detailsModal2', 2)">Kaydet</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal 3 - Çocuk Hematolojisi ve Onkolojisi -->
 <div class="modal fade" id="detailsModal3" tabindex="-1" aria-labelledby="detailsModalLabel3" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="detailsModalLabel3">Çocuk Hematolojisi ve Onkolojisi</h5>
+                <!-- Departman İsmi -->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group mb-3">
-                    <label for="emptyBeds3">Boş Yatak Sayısı</label>
-                    <input type="text" class="form-control" id="emptyBeds3" name="emptyBeds" placeholder="Boş Yatak Sayısını Girin">
+                    <label for="emptyBeds1">Boş Yatak Sayısı</label>
+                    <input type="text" class="form-control" id="emptyBeds1" name="emptyBeds"
+                        placeholder="Boş Yatak Sayısını Girin">
                 </div>
+                <div class="form-group mb-3">
+                    <label for="patientsCount1">Hasta Sayısı</label>
+                    <input type="text" class="form-control" id="patientsCount1" name="patientsCount"
+                        placeholder="Hasta Sayısını Girin">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="workingHoursStart1">Açık Olduğu Saatler (Başlangıç)</label>
+                    <input type="time" class="form-control" id="workingHoursStart1" name="workingHoursStart"
+                        placeholder="Başlangıç Saatini Girin">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="workingHoursEnd1">Açık Olduğu Saatler (Bitiş)</label>
+                    <input type="time" class="form-control" id="workingHoursEnd1" name="workingHoursEnd"
+                        placeholder="Bitiş Saatini Girin">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-success"
+                    onclick="saveDepartment('detailsModal3', 3)">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(modalId, departmentName) {
+    const modal = document.getElementById(modalId);
+
+    // Departman verisini çek
+    fetch('/Departman/get-department?name=' + encodeURIComponent(departmentName))
+    .then(response => response.json())
+    .then(data => {
+        // data boş obje ise yeni kayıt, dolu ise update
+        const patientCountInput = modal.querySelector('[name="patientsCount"]');
+        const emptyBedsInput = modal.querySelector('[name="emptyBeds"]');
+        const startTimeInput = modal.querySelector('[name="workingHoursStart"]');
+        const endTimeInput = modal.querySelector('[name="workingHoursEnd"]');
+
+        if (Object.keys(data).length === 0) {
+            // Yeni kayıt
+            patientCountInput.value = '';
+            emptyBedsInput.value = '';
+            startTimeInput.value = '';
+            endTimeInput.value = '';
+        } else {
+            // Var olan kaydı doldur
+            patientCountInput.value = data.patientCount;
+            emptyBedsInput.value = data.emptybedCount;
+            startTimeInput.value = data.startTime; // Timespan "HH:mm:ss" gelecektir, parse edin gerekirse
+            endTimeInput.value = data.endTime;
+        }
+
+        // Modal'ı göster
+        const bootstrapModal = new bootstrap.Modal(modal);
+        bootstrapModal.show();
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Bir hata oluştu veriyi çekerken.");
+    });
+}
+
+function saveDepartment(modalId) {
+    const modal = document.getElementById(modalId);
+    const name = modal.querySelector('.modal-title').innerText; 
+    const patientCount = modal.querySelector(`[name="patientsCount"]`).value;
+    const emptyBedCount = modal.querySelector(`[name="emptyBeds"]`).value;
+    const startTime = modal.querySelector(`[name="workingHoursStart"]`).value;
+    const endTime = modal.querySelector(`[name="workingHoursEnd"]`).value;
+
+    const department = {
+        // id: gerek yok, name üzerinden gideceğiz
+        name: name.trim(),
+        patientCount: parseInt(patientCount),
+        emptybedCount: parseInt(emptyBedCount),
+        startTime: startTime,
+        endTime: endTime
+    };
+
+    fetch('/Departman/create-or-update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(department),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert("Hata: " + data.error);
+        } else if (data.success) {
+            alert(data.success);
+            location.reload();
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        alert("Bir hata oluştu.");
+    });
+}
+
+</script>
