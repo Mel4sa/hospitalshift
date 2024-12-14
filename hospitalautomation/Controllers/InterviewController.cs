@@ -18,9 +18,9 @@ namespace hospitalautomation.Controllers
             _logger = logger;
         }
 [HttpGet("")]
-        public IActionResult Intervıewtable()
+        public IActionResult Interviewtable()
         {
-            return View("Intervıewtable");
+            return View("Interviewtable");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
