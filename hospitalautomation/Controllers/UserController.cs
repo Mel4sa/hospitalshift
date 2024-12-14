@@ -153,90 +153,95 @@ namespace hospitalautomation.Controllers
 
             return RedirectToAction("Index");
         }
-        [HttpGet("GetUser/{id}")]
-public async Task<IActionResult> GetUser(int id)
-{
-    var user = await _context.Users
-        .Where(user => user.Id == id && user.Role != UserRole.Admin && !user.IsDeleted)
-        .FirstOrDefaultAsync();
+        [HttpGet("get-user/{userId}")]
+        public async Task<IActionResult> GetUser(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null || user.IsDeleted)
+            {
+                return NotFound("Kullanıcı bulunamadı.");
+            }
 
-    if (user == null)
-    {
-        return NotFound();
-    }
+            // Role'e göre veri al
+            if (user.Role == UserRole.Assistant)
+            {
+                var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.UserId == userId);
+                if (assistant == null) return NotFound("Kullanıcı detayları bulunamadı.");
 
-    var userDto = new UserDto
-    {
-        Id = user.Id,
-        Email = user.Email,
-        Role = user.Role,
-        Password = user.Password,
-        FirstName = user.Role == UserRole.Assistant
-                    ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.FirstName
-                    : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.FirstName,
-        LastName = user.Role == UserRole.Assistant
-                    ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.LastName
-                    : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.LastName,
-        Address = user.Role == UserRole.Assistant
-                    ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.Address
-                    : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.Address,
-        TelNo = user.Role == UserRole.Assistant
-                    ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.TelNo
-                    : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.TelNo,
-    };
+                return Json(new
+                {
+                    user.Id,
+                    user.Email,
+                    user.Role,
+                    assistant.FirstName,
+                    assistant.LastName,
+                    assistant.Address,
+                    assistant.TelNo
+                });
+            }
+            else if (user.Role == UserRole.Instructor)
+            {
+                var instructor = await _context.Instructors.FirstOrDefaultAsync(i => i.UserId == userId);
+                if (instructor == null) return NotFound("Kullanıcı detayları bulunamadı.");
 
-    return Json(userDto);
-}
-        [HttpPost("update")]
+                return Json(new
+                {
+                    user.Id,
+                    user.Email,
+                    user.Role,
+                    instructor.FirstName,
+                    instructor.LastName,
+                    instructor.Address,
+                    instructor.TelNo
+                });
+            }
+
+            return NotFound("Kullanıcı detayları bulunamadı.");
+        }
+
+        [HttpPost("update-user")]
         public async Task<IActionResult> UpdateUser(UserDto userDto)
         {
-            if (ModelState.IsValid)
+            var user = await _context.Users.FindAsync(userDto.Id);
+            if (user == null || user.IsDeleted)
             {
-                var user = await _context.Users.FindAsync(userDto.Id);
-                if (user != null)
-                {
-                    user.Email = userDto.Email;
-                    user.Password = userDto.Password;
-                    user.Role = userDto.Role;
-
-                    // Asistan ya da Öğrenim Üyesi güncelleme işlemleri
-                    if (userDto.Role == UserRole.Assistant)
-                    {
-                        var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.UserId == userDto.Id);
-                        if (assistant != null)
-                        {
-                            assistant.FirstName = userDto.FirstName;
-                            assistant.LastName = userDto.LastName;
-                            assistant.Email = userDto.Email;
-                            assistant.Address = userDto.Address;
-                            assistant.TelNo = userDto.TelNo;
-                        }
-                    }
-                    else if (userDto.Role == UserRole.Instructor)
-                    {
-                        var instructor = await _context.Instructors.FirstOrDefaultAsync(i => i.UserId == userDto.Id);
-                        if (instructor != null)
-                        {
-                            instructor.FirstName = userDto.FirstName;
-                            instructor.LastName = userDto.LastName;
-                            instructor.Email = userDto.Email;
-                            instructor.Address = userDto.Address;
-                            instructor.TelNo = userDto.TelNo;
-                        }
-                    }
-
-                    await _context.SaveChangesAsync();
-                    TempData["Message"] = "Kullanıcı başarıyla güncellendi!";
-                }
-                else
-                {
-                    TempData["Error"] = "Kullanıcı bulunamadı!";
-                }
-
+                TempData["Error"] = "Kullanıcı bulunamadı.";
                 return RedirectToAction("Index");
             }
 
-            return View("Index");
+            // Kullanıcı bilgilerini güncelle
+            user.Email = userDto.Email;
+            user.Password = userDto.Password;
+            user.Role = userDto.Role;
+
+            // Role'e göre tablo güncelle
+            if (user.Role == UserRole.Assistant)
+            {
+                var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.UserId == userDto.Id);
+                if (assistant != null)
+                {
+                    assistant.FirstName = userDto.FirstName;
+                    assistant.LastName = userDto.LastName;
+                    assistant.Address = userDto.Address;
+                    assistant.TelNo = userDto.TelNo;
+                }
+            }
+            else if (user.Role == UserRole.Instructor)
+            {
+                var instructor = await _context.Instructors.FirstOrDefaultAsync(i => i.UserId == userDto.Id);
+                if (instructor != null)
+                {
+                    instructor.FirstName = userDto.FirstName;
+                    instructor.LastName = userDto.LastName;
+                    instructor.Address = userDto.Address;
+                    instructor.TelNo = userDto.TelNo;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            TempData["Message"] = "Kullanıcı başarıyla güncellendi!";
+            return RedirectToAction("Index");
         }
+
     }
 }

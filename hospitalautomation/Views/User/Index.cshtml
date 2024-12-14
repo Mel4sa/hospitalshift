@@ -70,21 +70,21 @@
 
     @if (Model != null && Model.Any())
     {
-                <table class="table table-striped table-bordered">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Id</th>
-                            <th>İsim</th>
-                            <th>Soyisim</th>
-                            <th>Telefon</th>
-                            <th>Email</th>
-                            <th>Rol</th>
-                            <th>Adres</th>
-                            <th>İşlemler</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                       <tbody>
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>İsim</th>
+                    <th>Soyisim</th>
+                    <th>Telefon</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Adres</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tbody>
                     @foreach (var user in Model)
                     {
                     <tr>
@@ -96,29 +96,22 @@
                         <td>@user.Role</td>
                         <td>@user.Address</td>
                         <td>
-                          <td>
-<td>
-    <td>
-    <button class="btn btn-sm btn-primary update-button" data-id="@user.Id" data-bs-toggle="modal" data-bs-target="#updateUserModal">Güncelle</button>
-</td>
-</td>        </td>
-                        </td>
-                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="openUpdateModal(@user.Id)">Güncelle</button>
                             <form asp-action="DeleteUser" asp-route-userId="@user.Id" method="post" style="display:inline;">
                                 <button type="submit" class="btn btn-sm btn-danger">Sil</button>
                             </form>
                         </td>
                     </tr>
                     }
-                </tbody>
-                    </tbody>
-                </table>
+            </tbody>
+            </tbody>
+        </table>
     }
     else
     {
-                <div class="alert alert-warning" role="alert">
-                    Henüz kullanıcı bulunmamaktadır.
-                </div>
+        <div class="alert alert-warning" role="alert">
+            Henüz kullanıcı bulunmamaktadır.
+        </div>
     }
 </div>
 
@@ -133,12 +126,12 @@
             <div class="modal-body">
                 @if (!ViewData.ModelState.IsValid)
                 {
-                            <div class="alert alert-danger">
+                    <div class="alert alert-danger">
                         @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                         {
-                                            <p>@error.ErrorMessage</p>
+                            <p>@error.ErrorMessage</p>
                         }
-                            </div>
+                    </div>
                 }
                 <form asp-action="CreateUser" method="post">
                     <div class="form-group mb-3">
@@ -180,54 +173,55 @@
     </div>
 </div>
 <!-- Güncelleme Modal'ı -->
-<div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="updateUserModalLabel">Kullanıcı Güncelle</h5>
+                <h5 class="modal-title" id="createUserModalLabel">Yeni Kullanıcı Oluştur</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="updateUserForm" method="post">
-                    <input type="hidden" id="UserId" name="UserId" />
+                <form asp-action="CreateUser" method="post">
                     <div class="form-group mb-3">
-                        <label for="Email" class="gradient-text">Email</label>
-                        <input type="email" class="form-control" id="Email" name="Email" required />
+                        <label for="CreateEmail" class="gradient-text">Email</label>
+                        <input type="email" class="form-control" id="CreateEmail" name="Email" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="Password" class="gradient-text">Şifre</label>
-                        <input type="password" class="form-control" id="Password" name="Password" required />
+                        <label for="CreatePassword" class="gradient-text">Şifre</label>
+                        <input type="password" class="form-control" id="CreatePassword" name="Password" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="Role" class="gradient-text">Rol</label>
-                        <select class="form-control" id="Role" name="Role" required>
+                        <label for="CreateRole" class="gradient-text">Rol</label>
+                        <select class="form-control" id="CreateRole" name="Role" required>
                             <option value="">Rol Seçin</option>
                             <option value="1">Asistan</option>
                             <option value="2">Öğrenim Üyesi</option>
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="FirstName" class="gradient-text">Ad</label>
-                        <input type="text" class="form-control" id="FirstName" name="FirstName" required />
+                        <label for="CreateFirstName" class="gradient-text">Ad</label>
+                        <input type="text" class="form-control" id="CreateFirstName" name="FirstName" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="LastName" class="gradient-text">Soyad</label>
-                        <input type="text" class="form-control" id="LastName" name="LastName" required />
+                        <label for="CreateLastName" class="gradient-text">Soyad</label>
+                        <input type="text" class="form-control" id="CreateLastName" name="LastName" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="Address" class="gradient-text">Adres</label>
-                        <input type="text" class="form-control" id="Address" name="Address" required />
+                        <label for="CreateAddress" class="gradient-text">Adres</label>
+                        <input type="text" class="form-control" id="CreateAddress" name="Address" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="TelNo" class="gradient-text">Telefon Numarası</label>
-                        <input type="number" class="form-control" id="TelNo" name="TelNo" required />
+                        <label for="CreateTelNo" class="gradient-text">Telefon Numarası</label>
+                        <input type="number" class="form-control" id="CreateTelNo" name="TelNo" required />
                     </div>
-                    <button type="submit" class="btn btn-gradient-blue">Kullanıcı Güncelle</button>
+                    <button type="submit" class="btn btn-gradient-blue">Kullanıcı Oluştur</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Güncelleme Modal'ı -->
 <div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -237,17 +231,17 @@
             </div>
             <div class="modal-body">
                 <form id="updateUserForm" asp-action="UpdateUser" method="post">
-                    <input type="hidden" id="UserId" name="Id" />
+                    <input type="hidden" id="UpdateUserId" name="Id" />
                     <div class="form-group mb-3">
-                        <label for="Email" class="gradient-text">Email</label>
+                        <label for="UpdateEmail" class="gradient-text">Email</label>
                         <input type="email" class="form-control" id="UpdateEmail" name="Email" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="Password" class="gradient-text">Şifre</label>
+                        <label for="UpdatePassword" class="gradient-text">Şifre</label>
                         <input type="password" class="form-control" id="UpdatePassword" name="Password" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="Role" class="gradient-text">Rol</label>
+                        <label for="UpdateRole" class="gradient-text">Rol</label>
                         <select class="form-control" id="UpdateRole" name="Role" required>
                             <option value="">Rol Seçin</option>
                             <option value="1">Asistan</option>
@@ -255,54 +249,50 @@
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="FirstName" class="gradient-text">Ad</label>
+                        <label for="UpdateFirstName" class="gradient-text">Ad</label>
                         <input type="text" class="form-control" id="UpdateFirstName" name="FirstName" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="LastName" class="gradient-text">Soyad</label>
+                        <label for="UpdateLastName" class="gradient-text">Soyad</label>
                         <input type="text" class="form-control" id="UpdateLastName" name="LastName" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="Address" class="gradient-text">Adres</label>
+                        <label for="UpdateAddress" class="gradient-text">Adres</label>
                         <input type="text" class="form-control" id="UpdateAddress" name="Address" required />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="TelNo" class="gradient-text">Telefon Numarası</label>
-                        <input type="text" class="form-control" id="UpdateTelNo" name="TelNo" required />
+                        <label for="UpdateTelNo" class="gradient-text">Telefon Numarası</label>
+                        <input type="number" class="form-control" id="UpdateTelNo" name="TelNo" required />
                     </div>
-                    <button type="submit" class="btn btn-update">Güncelle</button>
+                    <button type="submit" class="btn btn-gradient-blue">Kullanıcı Güncelle</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Update button tıklandığında modal'ı doldurmak için işlem yap
-        const updateButtons = document.querySelectorAll(".update-button");
-        
-        updateButtons.forEach(button => {
-            button.addEventListener("click", async () => {
-                const userId = button.getAttribute("data-id");
-                // API'den kullanıcı verilerini al
-                const response = await fetch(`/UserController/GetUser/${userId}`);
-                
-                if (response.ok) {
-                    const user = await response.json();
-                    
-                    // Modal'daki form alanlarını doldur
-                    document.querySelector("#updateUserForm #UserId").value = user.id;
-                    document.querySelector("#updateUserForm #UpdateEmail").value = user.email;
-                    document.querySelector("#updateUserForm #UpdatePassword").value = user.password;
-                    document.querySelector("#updateUserForm #UpdateRole").value = user.role;
-                    document.querySelector("#updateUserForm #UpdateFirstName").value = user.firstName;
-                    document.querySelector("#updateUserForm #UpdateLastName").value = user.lastName;
-                    document.querySelector("#updateUserForm #UpdateAddress").value = user.address;
-                    document.querySelector("#updateUserForm #UpdateTelNo").value = user.telNo;
-                } else {
-                    alert('Kullanıcı verisi alınırken bir hata oluştu.');
+    function openUpdateModal(userId) {
+        fetch(`/User/get-user/${userId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Kullanıcı bulunamadı.');
                 }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('UpdateUserId').value = data.id;
+                document.getElementById('UpdateEmail').value = data.email;
+                document.getElementById('UpdateRole').value = data.role;
+                document.getElementById('UpdateFirstName').value = data.firstName;
+                document.getElementById('UpdateLastName').value = data.lastName;
+                document.getElementById('UpdateAddress').value = data.address;
+                document.getElementById('UpdateTelNo').value = data.telNo;
+                const modal = new bootstrap.Modal(document.getElementById('updateUserModal'));
+                modal.show();
+            })
+            .catch(error => {
+                alert(error.message);
             });
-        });
-    });
+    }
 </script>
