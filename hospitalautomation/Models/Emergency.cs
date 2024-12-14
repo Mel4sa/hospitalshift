@@ -19,15 +19,12 @@ namespace hospitalautomation.Models
         public required string Title { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(500)]
         public required string Content { get; set; }
 
         [Required]
         [StringLength(50)]
         public DateTime CreatedAt { get; set; }
-
-
-
 
     }
 }

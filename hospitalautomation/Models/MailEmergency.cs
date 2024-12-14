@@ -18,7 +18,7 @@ namespace hospitalautomation.Models
 
 
         [Required]
-        [StringLength(50)]
+        [StringLength(500)]
         public required string MailContent { get; set; }
     }
 }

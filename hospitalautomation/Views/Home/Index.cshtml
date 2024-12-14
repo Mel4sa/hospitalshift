@@ -1,7 +1,69 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Ana Sayfa";
 }
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    
+    <style>
+        /* Sayfa arka planını ayarlıyoruz */
+        body {
+            background-image: url('/images/home.jpg'); /* Resmin yolunu ayarlayın */
+            background-size: cover; /* Resmi ekranda tam boyut yap */
+            background-position: center; /* Resmi ortalayın */
+            background-repeat: no-repeat; /* Resmin tekrar etmesini engelleyin */
+            height: 100vh; /* Tam ekran boyutu */
+        }
+
+        /* İçeriği daha görünür kılmak için stil */
+        .container {
+            position: relative;
+            z-index: 1; /* İçeriği arka plandan öne almak için */
+            padding-top: 100px;
+        }
+
+        /* Hoşgeldiniz başlığı stil */
+        .welcome-title {
+        font-size: 3.5rem; /* Yazıyı büyütüyoruz */
+        font-weight: 700; /* Kalın yazı */
+        color: #000; /* Siyah renk */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Yazıya gölge ekleyerek daha belirgin yapıyoruz */
+    }
+
+    /* Açıklama yazısının stilini kalınlaştırma */
+    .welcome-description {
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.6); /* Arka planı karartarak yazıyı daha okunabilir yapıyoruz */
+        border-radius: 15px; /* Yuvarlak köşeler */
+        padding: 30px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* Hafif bir gölge ekliyoruz */
+        max-width: 800px;
+        margin: 0 auto; /* Ortalıyoruz */
+    }
+    </style>
+</head>
+<body>
+    <!-- Ana Sayfa İçeriği -->
+    <div class="container text-center">
+        <!-- Hoşgeldiniz Başlığı -->
+        <h2 class="welcome-title">Hoşgeldiniz</h2>
+        
+        <!-- Açıklama Yazısı -->
+        <div class="welcome-description">
+            <p>Bu sistemden asistan, öğretim üyesi ve bölüm bilgilerini görebilir, dilediğiniz öğretim üyesine uygun oldukları saatlerde görüşmek için randevu alabilir ve nöbetlerinizi görüntüleyebilirsiniz.</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

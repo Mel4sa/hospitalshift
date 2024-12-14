@@ -67,7 +67,7 @@
         </div>
         <div class="card-body">
             <form method="post" action="/Emergency/Create">
-                <!-- Başlık Alanı -->
+                @Html.AntiForgeryToken()
                 <div class="form-group">
                     <label for="Title" class="form-label">Başlık</label>
                     <input type="text" class="form-control" id="Title" name="Title" placeholder="Başlık giriniz" required>
