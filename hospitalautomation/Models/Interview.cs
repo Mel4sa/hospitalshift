@@ -1,36 +1,33 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace hospitalautomation.Models
 {
-    public class Interview:BaseEntity
+    public class Interview : BaseEntity
     {
-
-
+        // AssistantId için ForeignKey
         public int AssistantId { get; set; }
-        [ForeignKey("AsstiantId")]
 
+        [ForeignKey("AssistantId")]
+        public virtual Assistant Assistant { get; set; } // Navigasyon özelliği
+
+        // InstructorId için ForeignKey
         public int InstructorId { get; set; }
-        [ForeignKey("InstructorId")]
 
+        [ForeignKey("InstructorId")]
+        public virtual Instructor Instructor { get; set; } // Navigasyon özelliği
+
+        // Randevu Başlangıç Zamanı
         [Required]
-        [StringLength(50)]
         public DateTime StartTime { get; set; }
 
+        // Randevu Bitiş Zamanı
         [Required]
-        [StringLength(50)]
         public DateTime EndTime { get; set; }
 
+        // Randevu Tarihi
         [Required]
-        [StringLength(50)]
         public DateTime ShiftDate { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public required string Status { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-@model List<hospitalautomation.Models.Dtos.UserDto>
+@model List<hospitalautomation.Models.Dtos.InterviewDto>
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -26,7 +26,24 @@
                 </tr>
             </thead>
             <tbody>
-               
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var interview in Model)
+                    {
+                        <tr>
+                            <td class="text-center">@interview.AssistantName</td>
+                            <td class="text-center">@interview.InstructorName</td>
+                            <td class="text-center">@interview.ShiftDate.ToString("dd.MM.yyyy")</td>
+                            <td class="text-center">@interview.Status</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Henüz bir randevu bulunmamaktadır.</td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>

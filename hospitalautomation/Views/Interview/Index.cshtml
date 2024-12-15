@@ -1,9 +1,11 @@
+@model List<hospitalautomation.Models.Interview>
 @{
     ViewData["Title"] = "Index";
 }
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,16 +14,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         /* Sayfa Arka Planı */
         body {
-    
+            background-color: #e0f7fa;
+            /* Soft pastel mavi */
             font-family: Arial, sans-serif;
         }
 
         .card {
             border-radius: 20px;
-            min-height: 350px; /* Daha uzun kartlar */
+            min-height: 350px;
+            /* Daha uzun kartlar */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -37,14 +43,15 @@
             padding: 15px 30px;
             font-size: 16px;
         }
-        
+
         /* Görüntüle butonunun focus durumunda mavi çizgiyi kaldırıyoruz */
         .btn-primary:focus {
             outline: none;
             box-shadow: none;
-            border: none; /* Mavi çizgiyi tamamen kaldırmak için */
+            border: none;
+            /* Mavi çizgiyi tamamen kaldırmak için */
         }
-        
+
         .btn-primary:hover {
             background: linear-gradient(to right, #0056b3, #0072ff);
         }
@@ -101,11 +108,13 @@
         }
 
         .row {
-            gap: 50px; /* Kartlar arasındaki mesafe */
+            gap: 50px;
+            /* Kartlar arasındaki mesafe */
         }
 
         .card-body {
-            padding: 50px 30px; /* Kartların içeriği için daha fazla boşluk */
+            padding: 50px 30px;
+            /* Kartların içeriği için daha fazla boşluk */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -113,17 +122,22 @@
         }
 
         .icon {
-            font-size: 40px; /* İkonların boyutunu büyütme */
-            margin-bottom: 20px; /* İkon ile metin arasında boşluk */
+            font-size: 40px;
+            /* İkonların boyutunu büyütme */
+            margin-bottom: 20px;
+            /* İkon ile metin arasında boşluk */
         }
 
         .modal-body label {
-            font-weight: bold; /* Yazıyı kalın yap */
+            font-weight: bold;
+            /* Yazıyı kalın yap */
             font-size: 18px;
-            color: #000000; /* Siyah renk */
+            color: #000000;
+            /* Siyah renk */
         }
 
-        .modal-body select, .modal-body input {
+        .modal-body select,
+        .modal-body input {
             border-radius: 10px;
             padding: 12px 20px;
             border: 2px solid #007bff;
@@ -138,7 +152,8 @@
         }
 
         .modal-dialog {
-            max-width: 800px; /* Daha geniş modal */
+            max-width: 800px;
+            /* Daha geniş modal */
         }
 
         /* Tabloyu modal ile uyumlu hale getirelim */
@@ -148,52 +163,64 @@
         }
 
         /* Tablo Satır ve Sütun Çizgilerini Belirgin Yapma */
-        .table th, .table td {
-            border: 2px solid black; /* Siyah renkli çizgiler */
+        .table th,
+        .table td {
+            border: 2px solid black;
+            /* Siyah renkli çizgiler */
         }
 
         .table th {
-            background-color: #f8f9fa; /* Başlık hücrelerine daha açık bir arka plan rengi */
-            font-weight: bold; /* Başlıkları kalın yap */
+            background-color: #f8f9fa;
+            /* Başlık hücrelerine daha açık bir arka plan rengi */
+            font-weight: bold;
+            /* Başlıkları kalın yap */
         }
 
         .table td {
-            background-color: #ffffff; /* Veri hücrelerinin beyaz arka planı */
+            background-color: #ffffff;
+            /* Veri hücrelerinin beyaz arka planı */
         }
 
         .table tr:hover {
-            background-color: #f1f1f1; /* Satır üzerine gelindiğinde renk değişimi */
+            background-color: #f1f1f1;
+            /* Satır üzerine gelindiğinde renk değişimi */
         }
 
         .modal-footer button {
             width: 48%;
-            height: 50px; /* Butonları daha yüksek yapmak */
-            padding: 0; /* İçerik boşluklarını kaldırıyoruz */
-            font-size: 16px; /* Font büyüklüğünü standart yapıyoruz */
+            height: 50px;
+            /* Butonları daha yüksek yapmak */
+            padding: 0;
+            /* İçerik boşluklarını kaldırıyoruz */
+            font-size: 16px;
+            /* Font büyüklüğünü standart yapıyoruz */
         }
 
         /* "İptal Et" butonunun görünümünü düzeltmek için */
         .btn-danger {
-            white-space: nowrap; /* Yazının altlı üstlü olmasını engeller */
+            white-space: nowrap;
+            /* Yazının altlı üstlü olmasını engeller */
         }
     </style>
 </head>
+
 <body>
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="row justify-content-center">
             <!-- Randevuları Görüntüle Kartı -->
-            <div class="col-lg-5 col-md-6 d-flex">
-                <div class="card shadow-lg border-0 w-100">
-                    <div class="card-body">
-                        <i class="bi bi-calendar-check icon text-primary"></i> <!-- Randevuları Görüntüle ikonu -->
-                        <h5 class="card-title text-primary">Randevuları Görüntüle</h5>
-                        <p class="card-text">Mevcut randevuları görüntülemek için tıklayın.</p>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#randevuGoruntuleModal">
-                            Görüntüle
-                        </button>
+                <!-- Randevuları Görüntüle Kartı (Sadece Instructor için) -->
+                <div class="col-lg-5 col-md-6 d-flex">
+                    <div class="card shadow-lg border-0 w-100">
+                        <div class="card-body">
+                            <i class="bi bi-calendar-check icon text-primary"></i>
+                            <h5 class="card-title text-primary">Randevuları Görüntüle</h5>
+                            <p class="card-text">Mevcut randevuları görüntülemek için tıklayın.</p>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#randevuGoruntuleModal">
+                                Görüntüle
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
             <!-- Randevu Al Kartı -->
             <div class="col-lg-5 col-md-6 d-flex">
@@ -202,7 +229,8 @@
                         <i class="bi bi-calendar-plus icon text-success"></i> <!-- Randevu Al ikonu -->
                         <h5 class="card-title text-success">Randevu Al</h5>
                         <p class="card-text">Yeni bir randevu almak için tıklayın.</p>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#randevuModal">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                            data-bs-target="#randevuModal">
                             Randevu Al
                         </button>
                     </div>
@@ -211,32 +239,60 @@
         </div>
     </div>
 
-    <!-- Randevuları Görüntüle Modal -->
+   @if ((bool)ViewBag.IsInstructor)
+{
     <div class="modal fade" id="randevuGoruntuleModal" tabindex="-1" aria-labelledby="randevuGoruntuleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="randevuGoruntuleModalLabel">Randevuları Görüntüle</h5>
+                    <h5 class="modal-title" id="randevuGoruntuleModalLabel">Randevularım</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Randevular Tablosu -->
-                    <table class="table">
-                        <thead>
+                    <table class="table table-striped table-hover">
+                        <thead class="table-primary">
                             <tr>
-                                <th scope="col">Asistan İsmi</th>
-                                <th scope="col">Tarih</th>
-                                <th scope="col">Saat Aralığı</th>
-                                <th scope="col">İşlem</th>
+                                <th>Asistan Adı</th>
+                                <th>Tarih</th>
+                                <th>Saat Aralığı</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Dr. Ahmet Yılmaz</td>
-                                <td>2024-12-16</td>
-                                <td>09:00 - 10:00</td>
-                                <td><button class="btn btn-danger btn-sm">İptal Et</button></td>
-                            </tr>
+                            @if (Model != null && Model.Any())
+                            {
+                                var assistants = ViewBag.Assistants as List<hospitalautomation.Models.Assistant>;
+                                foreach (var interview in Model)
+                                {
+                                    var assistant = assistants?.FirstOrDefault(a => a.Id == interview.AssistantId);
+                                    var assistantName = assistant != null 
+                                        ? $"{assistant.FirstName} {assistant.LastName}".Trim() 
+                                        : "Bilinmeyen Asistan";
+
+                                    <tr>
+                                        <td>@assistantName</td>
+                                        <td>@interview.ShiftDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@interview.StartTime.ToString("HH:mm") - @interview.EndTime.ToString("HH:mm")</td>
+                                        <td>Aktif</td>
+                                        <td>
+                                            <form asp-action="CancelInterview" method="post">
+                                                <input type="hidden" name="interviewId" value="@interview.Id" />
+                                                <button type="submit" class="btn btn-danger btn-sm" 
+                                                        onclick="return confirm('Randevuyu iptal etmek istediğinizden emin misiniz?');">
+                                                    İptal Et
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">Henüz bir randevunuz bulunmamaktadır.</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -246,58 +302,71 @@
             </div>
         </div>
     </div>
+}
 
-    <!-- Randevu Al Modal -->
+
+<!-- Randevu Al Modal -->
     <div class="modal fade" id="randevuModal" tabindex="-1" aria-labelledby="randevuModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="randevuModalLabel">Randevu Al</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- Öğretim Üyesi Seçimi -->
-                        <div class="mb-3">
-                            <label for="ogretimUyesi" class="form-label">Öğretim Üyesi Seçin</label>
-                            <select class="form-select" id="ogretimUyesi" required>
-                                <option value="" disabled selected>Bir öğretim üyesi seçin</option>
-                                <option value="Dr. Ahmet Yılmaz">Dr. Ahmet Yılmaz</option>
-                                <option value="Prof. Selin Karan">Prof. Selin Karan</option>
-                                <option value="Doç. İsmail Aydın">Doç. İsmail Aydın</option>
-                            </select>
-                        </div>
-
-                        <!-- Tarih Seçimi -->
-                        <div class="mb-3">
-                            <label for="randevuTarihi" class="form-label">Randevu Tarihini Seçin</label>
-                            <input type="date" class="form-control" id="randevuTarihi" required>
-                        </div>
-
-                        <!-- Saat Seçimi -->
-                        <div class="mb-3">
-                            <label for="saatAraligi" class="form-label">Saat Aralığı Seçin</label>
-                            <select class="form-select" id="saatAraligi" required>
-                                <option value="" disabled selected>Saat aralığını seçin</option>
-                                <option value="09:00 - 10:00">09:00 - 10:00</option>
-                                <option value="10:00 - 11:00">10:00 - 11:00</option>
-                                <option value="11:00 - 12:00">11:00 - 12:00</option>
-                                <option value="14:00 - 15:00">14:00 - 15:00</option>
-                                <option value="15:00 - 16:00">15:00 - 16:00</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">İptal Et</button>
-                    <button type="button" class="btn btn-success">Kaydet</button>
-                </div>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Randevu Al</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
+            <div class="modal-body">
+                <form asp-action="CreateInterview" asp-controller="Interview" method="post">
+    <!-- Öğretim Üyesi Seçimi -->
+    <div class="mb-3">
+        <select class="form-select" id="ogretimUyesi" name="InstructorId" required>
+            <option selected disabled>Bir öğretim üyesi seçin</option>
+            @if (ViewBag.Instructors != null)
+            {
+                @foreach (var instructor in ViewBag.Instructors) 
+                {
+                    <option value="@instructor.Id">@instructor.FirstName</option>
+                }
+            }
+            else
+            {
+                <option disabled>Sistemde öğretim üyesi bulunamadı</option>
+            }
+        </select>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Tarih Seçimi -->
+    <div class="mb-3">
+        <label for="randevuTarihi" class="form-label">Randevu Tarihini Seçin</label>
+        <input type="date" class="form-control" id="randevuTarihi" name="ShiftDate"
+               value="@(ViewBag.FutureInterview != null ? ((DateTime)ViewBag.FutureInterview.ShiftDate).ToString("yyyy-MM-dd") : "")"
+               required>
+    </div>
+
+    <!-- Saat Aralığı Seçimi -->
+ <!-- Başlangıç Saati -->
+                    <div class="mb-3">
+                        <label for="startTime" class="form-label">Başlangıç Saati</label>
+                        <input type="time" class="form-control" id="startTime" name="StartTime"
+                               value="@(ViewBag.FutureInterview != null ? ((DateTime)ViewBag.FutureInterview.StartTime).ToString("HH:mm") : "")"
+                               required>
+                    </div>
+
+                    <!-- Bitiş Saati -->
+                    <div class="mb-3">
+                        <label for="endTime" class="form-label">Bitiş Saati</label>
+                        <input type="time" class="form-control" id="endTime" name="EndTime"
+                               value="@(ViewBag.FutureInterview != null ? ((DateTime)ViewBag.FutureInterview.EndTime).ToString("HH:mm") : "")"
+                               required>
+                    </div>
+
+    <!-- Kaydet Butonu -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="submit" class="btn btn-success">Kaydet</button>
+    </div>
+</form>
+            </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>

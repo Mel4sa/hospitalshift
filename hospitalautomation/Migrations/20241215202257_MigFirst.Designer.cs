@@ -11,8 +11,8 @@ using hospitalautomation.Models.Context;
 namespace hospitalautomation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241213121950_FirstMig")]
-    partial class FirstMig
+    [Migration("20241215202257_MigFirst")]
+    partial class MigFirst
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,9 @@ namespace hospitalautomation.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time(6)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -93,6 +96,9 @@ namespace hospitalautomation.Migrations
                     b.Property<int>("PatientCount")
                         .HasMaxLength(50)
                         .HasColumnType("int");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time(6)");
 
                     b.HasKey("Id");
 
@@ -107,8 +113,8 @@ namespace hospitalautomation.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasMaxLength(50)
@@ -193,7 +199,6 @@ namespace hospitalautomation.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("EndTime")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("InstructorId")
@@ -203,19 +208,16 @@ namespace hospitalautomation.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("ShiftDate")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("StartTime")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AssistantId");
+
+                    b.HasIndex("InstructorId");
 
                     b.ToTable("Interviews");
                 });
@@ -237,8 +239,8 @@ namespace hospitalautomation.Migrations
 
                     b.Property<string>("MailContent")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -260,25 +262,26 @@ namespace hospitalautomation.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("DepartmantId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("ShiftDate")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("StartTime")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssistantId");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Shifts");
                 });
@@ -334,6 +337,44 @@ namespace hospitalautomation.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("hospitalautomation.Models.Interview", b =>
+                {
+                    b.HasOne("hospitalautomation.Models.Assistant", "Assistant")
+                        .WithMany()
+                        .HasForeignKey("AssistantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("hospitalautomation.Models.Instructor", "Instructor")
+                        .WithMany()
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assistant");
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("hospitalautomation.Models.Shift", b =>
+                {
+                    b.HasOne("hospitalautomation.Models.Assistant", "Assistant")
+                        .WithMany()
+                        .HasForeignKey("AssistantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("hospitalautomation.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assistant");
+
+                    b.Navigation("Department");
                 });
 #pragma warning restore 612, 618
         }

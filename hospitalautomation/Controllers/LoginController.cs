@@ -1,6 +1,10 @@
 using System.Linq;
+using System.Security.Claims;
 using hospitalautomation.Models.Context;
 using hospitalautomation.Models.Enum;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hospitalautomation.Controllers
@@ -17,14 +21,9 @@ namespace hospitalautomation.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // TempData'daki mesajı ViewBag'e aktar
-            if (TempData["Message"] != null)
-            {
-                ViewBag.Message = TempData["Message"].ToString();
-            }
-
             return View();
         }
+
 
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
@@ -36,10 +35,26 @@ namespace hospitalautomation.Controllers
 
                 if (user != null && user.Password == model.Password)
                 {
-                    // Başarılı giriş sonrası mesajı TempData'ya kaydet
-                    TempData["Message"] = "Giriş başarılı!";
+                    // Kullanıcı bilgilerini Claims ile sakla
+                    var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Kullanıcı ID'si
+                new Claim(ClaimTypes.Email, user.Email), // Kullanıcı E-posta
+                new Claim(ClaimTypes.Role, user.Role.ToString()) // Kullanıcı Rolü
+            };
 
-                    // Kullanıcıyı Home sayfasına yönlendir
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true, // Kalıcı oturum
+                        ExpiresUtc = DateTime.UtcNow.AddHours(1) // Oturum süresi
+                    };
+
+                    // Oturum başlat
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+                    TempData["Message"] = "Giriş başarılı!";
                     return RedirectToAction("Index", "Home");
                 }
                 else

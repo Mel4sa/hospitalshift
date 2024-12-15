@@ -196,7 +196,6 @@ namespace hospitalautomation.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("EndTime")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("InstructorId")
@@ -206,19 +205,16 @@ namespace hospitalautomation.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("ShiftDate")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("StartTime")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AssistantId");
+
+                    b.HasIndex("InstructorId");
 
                     b.ToTable("Interviews");
                 });
@@ -338,6 +334,25 @@ namespace hospitalautomation.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("hospitalautomation.Models.Interview", b =>
+                {
+                    b.HasOne("hospitalautomation.Models.Assistant", "Assistant")
+                        .WithMany()
+                        .HasForeignKey("AssistantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("hospitalautomation.Models.Instructor", "Instructor")
+                        .WithMany()
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assistant");
+
+                    b.Navigation("Instructor");
                 });
 
             modelBuilder.Entity("hospitalautomation.Models.Shift", b =>

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using hospitalautomation.Models;
+using hospitalautomation.Models.Context;
+using hospitalautomation.Models.Dtos;
 
 namespace hospitalautomation.Controllers
 {
@@ -12,27 +14,147 @@ namespace hospitalautomation.Controllers
     public class InterviewController : Controller
     {
         private readonly ILogger<InterviewController> _logger;
-
-        public InterviewController(ILogger<InterviewController> logger)
+        private readonly ApplicationDbContext _context;
+        public InterviewController(ILogger<InterviewController> logger, ApplicationDbContext context)
         {
             _logger = logger;
-        }
-        [HttpGet("")]
-        public IActionResult Interviewtable()
-        {
-            return View("Interviewtable");
+            _context = context;
         }
 
-        [HttpGet("Index")]
+        [HttpGet("Interviewtable")]
+        public IActionResult Interviewtable()
+        {
+            var interviews = _context.Interviews
+                .Where(i => !i.IsDeleted)
+                .OrderBy(i => i.ShiftDate)
+                .Select(i => new InterviewDto
+                {
+                    AssistantName = _context.Assistants
+                        .Where(a => a.Id == i.AssistantId)
+                        .Select(a => $"{a.FirstName} {a.LastName}")
+                        .FirstOrDefault(),
+                    InstructorName = _context.Instructors
+                        .Where(inst => inst.Id == i.InstructorId)
+                        .Select(inst => $"{inst.FirstName} {inst.LastName}")
+                        .FirstOrDefault(),
+                    ShiftDate = i.ShiftDate,
+                    Status = i.ShiftDate >= DateTime.Today ? "Aktif" : "Geçmiş"
+                })
+                .ToList();
+
+            return View(interviews);
+        }
+
+
+        [HttpGet("")]
         public IActionResult Index()
         {
-            return View("Index");
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("Kullanıcı giriş yapmamış.");
+            }
+
+            bool isInstructor = User.IsInRole("ÖğretimÜyesi");
+            ViewBag.IsInstructor = isInstructor;
+
+            int numericUserId;
+            if (!int.TryParse(userId, out numericUserId))
+            {
+                _logger.LogError("User ID parsing failed.");
+                return BadRequest("Geçersiz kullanıcı kimliği.");
+            }
+
+            List<Interview> interviews;
+
+           if (isInstructor)
+            {
+                // InstructorId'yi Instructor tablosundan UserId ile bulma
+                var instructor = _context.Instructors.FirstOrDefault(i => i.UserId == numericUserId);
+                // InstructorId ile Interviews filtreleme
+                 interviews = _context.Interviews
+                        .Where(i => i.InstructorId == instructor.Id && !i.IsDeleted)
+                        .OrderBy(i => i.ShiftDate)
+                        .ToList();
+            }
+            else
+            {
+                var assistant = _context.Assistants.FirstOrDefault(i => i.UserId == numericUserId);
+
+                interviews = _context.Interviews
+                .Where(i => i.AssistantId == assistant.Id && !i.IsDeleted)
+                .OrderBy(i => i.ShiftDate)
+                .ToList();
+            }
+
+            ViewBag.Instructors = _context.Instructors.ToList();
+            ViewBag.Assistants = _context.Assistants.ToList();
+            ViewBag.FutureInterview = interviews
+                .Where(i => i.ShiftDate >= DateTime.Today)
+                .OrderBy(i => i.ShiftDate)
+                .ThenBy(i => i.StartTime)
+                .FirstOrDefault();
+
+            return View(interviews);
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View("Error!");
+        }
+
+        // Randevu Alma İşlemi
+        [HttpPost("CreateInterview")]
+        public IActionResult CreateInterview(int instructorId, DateTime shiftDate, DateTime startTime, DateTime endTime)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Index", "Login");
+
+            // Randevu Çakışma Kontrolü
+            var existingInterview = _context.Interviews
+                .FirstOrDefault(i => i.InstructorId == instructorId
+                                     && i.ShiftDate == shiftDate
+                                     && i.StartTime <= endTime
+                                     && i.EndTime >= startTime);
+
+            if (existingInterview != null)
+            {
+                TempData["ErrorMessage"] = "Bu öğretim üyesi için belirtilen tarihte başka bir randevu var.";
+                return RedirectToAction("Index");
+            }
+
+            // Yeni Randevu Oluşturma
+            var newInterview = new Interview
+            {
+                AssistantId = int.Parse(userId),
+                InstructorId = instructorId,
+                ShiftDate = shiftDate,
+                StartTime = startTime,
+                EndTime = endTime,
+            };
+
+            _context.Interviews.Add(newInterview);
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Randevu başarıyla oluşturuldu.";
+            return RedirectToAction("Index");
+        }
+
+        // Randevu İptali
+        [HttpPost("CancelInterview")]
+        public IActionResult CancelInterview(int interviewId)
+        {
+            var interview = _context.Interviews.Find(interviewId);
+            if (interview == null)
+                return NotFound("Randevu bulunamadı.");
+
+               interview.IsDeleted = true;
+                _context.Interviews.Update(interview);
+                _context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
