@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Assistantable";
+    ViewData["Title"] = "Instructortable";
 }
 
 <!DOCTYPE html>
@@ -13,8 +13,8 @@
     <!-- Font Awesome CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        /* Modal Başlık Rengi */
-        .modal-header {
+        /* Arka plan görselini ekleme */
+     .modal-header {
             background-color: #0072ff;
             color: white;
         }
@@ -91,32 +91,37 @@ h2 {
 <body>
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Asistanlar </h2>
+    <h2 class="text-center mb-4">Öğretim Üyeleri </h2>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover shadow-sm">
             <thead>
                 <tr>
                     <th scope="col">İsim</th>
                     <th scope="col">Soyisim</th>
+
                     <th scope="col" class="actions-column">Detay</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Örnek Asistan Verileri -->
+                <!-- Örnek Öğretim Üyesi Verileri -->
                 <tr>
-                    <td>Melisa</td>
-                    <td>Simsek</td>
+                    <td>Ahmet</td>
+                    <td>Kaya</td>
+
                     <td class="details-text-container">
-                        <span class="details-icon" data-bs-toggle="modal" data-bs-target="#assistantModal" onclick="openModal('Melisa', 'Simsek', 'melisa@example.com', '1234 Example St.', '555-1234')">
+                        <span class="details-icon" data-bs-toggle="modal" data-bs-target="#professorModal" 
+                              onclick="openModal('Ahmet', 'Kaya', 'ahmet.kaya@example.com', 'Bilgisayar Mühendisliği', '555-9876')">
                             <i class="fas fa-eye"></i>
                         </span>
                     </td>
                 </tr>
                 <tr>
-                    <td>Ahmet</td>
-                    <td>Yılmaz</td>
+                    <td>Elif</td>
+                    <td>Şahin</td>
+
                     <td class="details-text-container">
-                        <span class="details-icon" data-bs-toggle="modal" data-bs-target="#assistantModal" onclick="openModal('Ahmet', 'Yılmaz', 'ahmet@example.com', '5678 Example St.', '555-5678')">
+                        <span class="details-icon" data-bs-toggle="modal" data-bs-target="#professorModal" 
+                              onclick="openModal('Elif', 'Şahin', 'elif.sahin@example.com', 'Elektrik-Elektronik Mühendisliği', '555-1234')">
                             <i class="fas fa-eye"></i>
                         </span>
                     </td>
@@ -127,19 +132,19 @@ h2 {
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="assistantModal" tabindex="-1" aria-labelledby="assistantModalLabel" aria-hidden="true">
+<div class="modal fade" id="professorModal" tabindex="-1" aria-labelledby="professorModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="assistantModalLabel">Asistan Detayları</h5>
+                <h5 class="modal-title" id="professorModalLabel">Öğretim Üyesi Detayları</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>İsim:</strong> <span id="assistantName"></span></p>
-                <p><strong>Soyisim:</strong> <span id="assistantSurname"></span></p>
-                <p><strong>Email:</strong> <span id="assistantEmail"></span></p>
-                <p><strong>Adres:</strong> <span id="assistantAddress"></span></p>
-                <p><strong>Telefon:</strong> <span id="assistantPhone"></span></p>
+                <p><strong>İsim:</strong> <span id="professorName"></span></p>
+                <p><strong>Soyisim:</strong> <span id="professorSurname"></span></p>
+                <p><strong>Email:</strong> <span id="professorEmail"></span></p>
+                <p><strong>Bölüm:</strong> <span id="professorDepartment"></span></p>
+                <p><strong>Telefon:</strong> <span id="professorPhone"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
@@ -153,12 +158,12 @@ h2 {
 
 <script>
     // Modal'ı açmak için fonksiyon
-    function openModal(name, surname, email, address, phone) {
-        document.getElementById('assistantName').textContent = name;
-        document.getElementById('assistantSurname').textContent = surname;
-        document.getElementById('assistantEmail').textContent = email;
-        document.getElementById('assistantAddress').textContent = address;
-        document.getElementById('assistantPhone').textContent = phone;
+    function openModal(name, surname, email, department, phone) {
+        document.getElementById('professorName').textContent = name;
+        document.getElementById('professorSurname').textContent = surname;
+        document.getElementById('professorEmail').textContent = email;
+        document.getElementById('professorDepartment').textContent = department;
+        document.getElementById('professorPhone').textContent = phone;
     }
 </script>
 
