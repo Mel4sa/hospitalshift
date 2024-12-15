@@ -19,6 +19,12 @@ namespace hospitalautomation.Controllers
             _context = context; // DbContext'i constructor ile alıyoruz
         }
 
+        [HttpGet("Assistantable")]
+        public IActionResult Assistantable()
+        {
+            return View("Assistantable");
+        }
+
         [HttpGet("create")]
         public IActionResult CreateUser()
         {

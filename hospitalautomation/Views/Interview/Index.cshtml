@@ -1,0 +1,303 @@
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index - Hospital Automation</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Sayfa Arka Planı */
+        body {
+            background-color: #e0f7fa; /* Soft pastel mavi */
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            border-radius: 20px;
+            min-height: 350px; /* Daha uzun kartlar */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #0072ff, #00c6ff);
+            border: none;
+            border-radius: 30px;
+            padding: 15px 30px;
+            font-size: 16px;
+        }
+        
+        /* Görüntüle butonunun focus durumunda mavi çizgiyi kaldırıyoruz */
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: none;
+            border: none; /* Mavi çizgiyi tamamen kaldırmak için */
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(to right, #0056b3, #0072ff);
+        }
+
+        .btn-success {
+            background: linear-gradient(to right, #28a745, #38d39f);
+            border: none;
+            border-radius: 30px;
+            padding: 15px 30px;
+            font-size: 16px;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(to right, #218838, #28a745);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 30px;
+            font-size: 16px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-danger {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            border: none;
+            border-radius: 30px;
+            padding: 15px 30px;
+            font-size: 16px;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(to right, #c0392b, #e74c3c);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .container {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        .row {
+            gap: 50px; /* Kartlar arasındaki mesafe */
+        }
+
+        .card-body {
+            padding: 50px 30px; /* Kartların içeriği için daha fazla boşluk */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 40px; /* İkonların boyutunu büyütme */
+            margin-bottom: 20px; /* İkon ile metin arasında boşluk */
+        }
+
+        .modal-body label {
+            font-weight: bold; /* Yazıyı kalın yap */
+            font-size: 18px;
+            color: #000000; /* Siyah renk */
+        }
+
+        .modal-body select, .modal-body input {
+            border-radius: 10px;
+            padding: 12px 20px;
+            border: 2px solid #007bff;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Mavi çizgiyi kaldırmak için focus stilini ekliyoruz */
+        .btn-success:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .modal-dialog {
+            max-width: 800px; /* Daha geniş modal */
+        }
+
+        /* Tabloyu modal ile uyumlu hale getirelim */
+        .modal-body table {
+            width: 100%;
+            font-size: 16px;
+        }
+
+        /* Tablo Satır ve Sütun Çizgilerini Belirgin Yapma */
+        .table th, .table td {
+            border: 2px solid black; /* Siyah renkli çizgiler */
+        }
+
+        .table th {
+            background-color: #f8f9fa; /* Başlık hücrelerine daha açık bir arka plan rengi */
+            font-weight: bold; /* Başlıkları kalın yap */
+        }
+
+        .table td {
+            background-color: #ffffff; /* Veri hücrelerinin beyaz arka planı */
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1; /* Satır üzerine gelindiğinde renk değişimi */
+        }
+
+        .modal-footer button {
+            width: 48%;
+            height: 50px; /* Butonları daha yüksek yapmak */
+            padding: 0; /* İçerik boşluklarını kaldırıyoruz */
+            font-size: 16px; /* Font büyüklüğünü standart yapıyoruz */
+        }
+
+        /* "İptal Et" butonunun görünümünü düzeltmek için */
+        .btn-danger {
+            white-space: nowrap; /* Yazının altlı üstlü olmasını engeller */
+        }
+    </style>
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="row justify-content-center">
+            <!-- Randevuları Görüntüle Kartı -->
+            <div class="col-lg-5 col-md-6 d-flex">
+                <div class="card shadow-lg border-0 w-100">
+                    <div class="card-body">
+                        <i class="bi bi-calendar-check icon text-primary"></i> <!-- Randevuları Görüntüle ikonu -->
+                        <h5 class="card-title text-primary">Randevuları Görüntüle</h5>
+                        <p class="card-text">Mevcut randevuları görüntülemek için tıklayın.</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#randevuGoruntuleModal">
+                            Görüntüle
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Randevu Al Kartı -->
+            <div class="col-lg-5 col-md-6 d-flex">
+                <div class="card shadow-lg border-0 w-100">
+                    <div class="card-body">
+                        <i class="bi bi-calendar-plus icon text-success"></i> <!-- Randevu Al ikonu -->
+                        <h5 class="card-title text-success">Randevu Al</h5>
+                        <p class="card-text">Yeni bir randevu almak için tıklayın.</p>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#randevuModal">
+                            Randevu Al
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Randevuları Görüntüle Modal -->
+    <div class="modal fade" id="randevuGoruntuleModal" tabindex="-1" aria-labelledby="randevuGoruntuleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="randevuGoruntuleModalLabel">Randevuları Görüntüle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Randevular Tablosu -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Asistan İsmi</th>
+                                <th scope="col">Tarih</th>
+                                <th scope="col">Saat Aralığı</th>
+                                <th scope="col">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dr. Ahmet Yılmaz</td>
+                                <td>2024-12-16</td>
+                                <td>09:00 - 10:00</td>
+                                <td><button class="btn btn-danger btn-sm">İptal Et</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Randevu Al Modal -->
+    <div class="modal fade" id="randevuModal" tabindex="-1" aria-labelledby="randevuModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="randevuModalLabel">Randevu Al</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <!-- Öğretim Üyesi Seçimi -->
+                        <div class="mb-3">
+                            <label for="ogretimUyesi" class="form-label">Öğretim Üyesi Seçin</label>
+                            <select class="form-select" id="ogretimUyesi" required>
+                                <option value="" disabled selected>Bir öğretim üyesi seçin</option>
+                                <option value="Dr. Ahmet Yılmaz">Dr. Ahmet Yılmaz</option>
+                                <option value="Prof. Selin Karan">Prof. Selin Karan</option>
+                                <option value="Doç. İsmail Aydın">Doç. İsmail Aydın</option>
+                            </select>
+                        </div>
+
+                        <!-- Tarih Seçimi -->
+                        <div class="mb-3">
+                            <label for="randevuTarihi" class="form-label">Randevu Tarihini Seçin</label>
+                            <input type="date" class="form-control" id="randevuTarihi" required>
+                        </div>
+
+                        <!-- Saat Seçimi -->
+                        <div class="mb-3">
+                            <label for="saatAraligi" class="form-label">Saat Aralığı Seçin</label>
+                            <select class="form-select" id="saatAraligi" required>
+                                <option value="" disabled selected>Saat aralığını seçin</option>
+                                <option value="09:00 - 10:00">09:00 - 10:00</option>
+                                <option value="10:00 - 11:00">10:00 - 11:00</option>
+                                <option value="11:00 - 12:00">11:00 - 12:00</option>
+                                <option value="14:00 - 15:00">14:00 - 15:00</option>
+                                <option value="15:00 - 16:00">15:00 - 16:00</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">İptal Et</button>
+                    <button type="button" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

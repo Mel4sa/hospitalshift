@@ -17,10 +17,16 @@ namespace hospitalautomation.Controllers
         {
             _logger = logger;
         }
-[HttpGet("")]
+        [HttpGet("")]
         public IActionResult Interviewtable()
         {
             return View("Interviewtable");
+        }
+
+        [HttpGet("Index")]
+        public IActionResult Index()
+        {
+            return View("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

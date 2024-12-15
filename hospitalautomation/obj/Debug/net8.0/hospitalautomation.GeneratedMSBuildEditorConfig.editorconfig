@@ -38,6 +38,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/melisasimsek/Desktop/hospitalautomation/hospitalautomation/Views/Interview/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSW50ZXJ2aWV3L0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/melisasimsek/Desktop/hospitalautomation/hospitalautomation/Views/Interview/Interviewtable.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSW50ZXJ2aWV3L0ludGVydmlld3RhYmxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -68,6 +72,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/melisasimsek/Desktop/hospitalautomation/hospitalautomation/Views/Shift/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hpZnQvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/melisasimsek/Desktop/hospitalautomation/hospitalautomation/Views/User/Assistantable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9Bc3Npc3RhbnRhYmxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/melisasimsek/Desktop/hospitalautomation/hospitalautomation/Views/User/Index.cshtml]
