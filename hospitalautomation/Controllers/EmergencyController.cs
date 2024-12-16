@@ -66,8 +66,8 @@ namespace hospitalautomation.Controllers
             // SMTP ayarları
             var smtpHost = "smtp.gmail.com";
             var smtpPort = 587;
-            var smtpUser = "hbilalcinal@gmail.com";
-            var smtpPass = "tqktaustbvneybed";
+            var smtpUser = "melisaxsimsek@gmail.com";
+            var smtpPass = "levqhxgwtjcwramo";
 
             using (var client = new SmtpClient(smtpHost, smtpPort))
             {

@@ -31,19 +31,27 @@ namespace hospitalautomation.Controllers
         {
             return View("Index");
         }
-[HttpGet("get-department")]
+
+
+        [HttpGet("DepartmantsInfo")]
+        public IActionResult DepartmantsInfo()
+        {
+            return View("DepartmantsInfo");
+        }
+
+        [HttpGet("get-department")]
         public IActionResult GetDepartment(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return Json(new {});
- 
+                return Json(new { });
+
             var dept = _context.Departments.FirstOrDefault(d => d.Name == name);
             if (dept == null)
-                return Json(new {}); // Boş obje dönüyoruz, front-end bunu kontrol eder
- 
+                return Json(new { }); // Boş obje dönüyoruz, front-end bunu kontrol eder
+
             return Json(dept); // Departman bilgilerini JSON olarak dönüyoruz
         }
- 
+
         [HttpPost("create-or-update")]
         public async Task<IActionResult> CreateOrUpdate()
         {
@@ -53,14 +61,14 @@ namespace hospitalautomation.Controllers
             {
                 body = await reader.ReadToEndAsync();
             }
- 
+
             var department = JsonConvert.DeserializeObject<Department>(body);
- 
+
             if (department == null || string.IsNullOrWhiteSpace(department.Name))
             {
                 return Json(new { error = "Departman bilgileri eksik." });
             }
- 
+
             var validationErrors = new List<string>();
             if (string.IsNullOrWhiteSpace(department.Name))
             {
@@ -82,15 +90,15 @@ namespace hospitalautomation.Controllers
             {
                 validationErrors.Add("Bitiş saati belirtilmelidir.");
             }
- 
+
             if (validationErrors.Any())
             {
                 return Json(new { error = string.Join(" ", validationErrors) });
             }
- 
+
             // Aynı isme sahip departman var mı diye kontrol et
             var existingDepartment = _context.Departments.FirstOrDefault(d => d.Name == department.Name);
- 
+
             if (existingDepartment != null)
             {
                 // Güncelleme
@@ -104,10 +112,10 @@ namespace hospitalautomation.Controllers
                 // Yeni oluşturma
                 _context.Departments.Add(department);
             }
- 
+
             await _context.SaveChangesAsync();
             return Json(new { success = "Departman başarıyla kaydedildi!" });
         }
-      
+
     }
 }
