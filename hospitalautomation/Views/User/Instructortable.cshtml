@@ -13,22 +13,68 @@
     <!-- Font Awesome CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        /* Arka plan görselini ekleme */
-     .modal-header {
-            background-color: #0072ff;
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .table-container {
+            max-width: 90%;
+            margin: 0 auto;
+            margin-top: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #000;
+        }
+
+        /* Başlık Arka Planı */
+        .table-title {
+            background: blue; /* Mavi gradyan */
+            color: #ffffff;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 2px solid #000;
+        }
+
+        .table {
+            margin: 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        /* Tablo Başlıkları */
+        .table th {
+            background-color: #4facfe; /* Açık mavi */
             color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
         }
 
-        /* Detay Yazısının Konumu */
-        .details-text-container {
-            text-align: center; /* Yazının ortalanması */
-            padding-right: 0;
+        /* Satırların Arka Planı */
+        .table tbody tr:nth-child(odd) {
+            background-color: #e6f7ff; /* Açık mavi tonu */
         }
 
-        /* Detaylar için Göz İkonu */
+        .table tbody tr:nth-child(even) {
+            background-color: #ffffff; /* Beyaz */
+        }
+
+        /* Hover Efekti */
+        .table-hover tbody tr:hover {
+            background-color: #b3e5fc; /* Daha koyu mavi hover efekti */
+        }
+
+        .table td, .table th {
+            border: 2px solid #000;
+            text-align: center;
+            padding: 10px;
+            vertical-align: middle;
+        }
+
         .details-icon {
             font-size: 18px;
-            color: #0072ff;
+            color: #007bff;
             cursor: pointer;
         }
 
@@ -36,99 +82,48 @@
             color: #0056b3;
         }
 
-        /* Tablo Başlık ve Arka Plan Rengi */
-        .table th {
-            background-color: #f1f1f1; /* Soft ve modern gri ton */
-            color: #333; /* Başlık rengi */
-        }
-h2 {
-    color: white; /* Yazıyı siyah yap */
-}
-
-        /* Tabloyu küçültmek için genel ayar */
-        .table-responsive {
-            max-width: 90%;
-            margin: 0 auto;
-        }
-
-        /* İşlem sütununun genişliğini küçültmek */
-        .table th, .table td {
-            text-align: center;
-        }
-
-        .table .actions-column {
-            width: 150px; /* İşlem sütununun genişliğini küçült */
-        }
-
-        /* Tablo çizgilerini siyah yapmak ve kalınlaştırmak */
-        .table, .table th, .table td {
-            border: 2px solid #000; /* Kalın siyah çizgiler */
-        }
-
-        /* Satırların arka planını beyaz yapmak */
-        .table tbody tr {
-            background-color: white; /* Satır arka planını beyaz yap */
-        }
-
-        /* Satır hover efekti */
-        .table-hover tbody tr:hover {
-            background-color: #f7f7f7; /* Hover arka plan rengini yumuşatmak */
-        }
-
-        /* Tablonun yazı tipi ve genel düzen */
-        .table td {
-            font-size: 14px;
-            vertical-align: middle;
-        }
-
-        /* Modern görünümlü başlıklar */
-        .table th {
-            background: linear-gradient(to right, #b3cde0, #e1f7f9);
-            color: #3b3b3b;
+        .modal-header {
+            background-color: #007bff;
+            color: white;
         }
     </style>
 </head>
 <body>
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Öğretim Üyeleri </h2>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover shadow-sm">
-            <thead>
-                <tr>
-                    <th scope="col">İsim</th>
-                    <th scope="col">Soyisim</th>
-
-                    <th scope="col" class="actions-column">Detay</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Örnek Öğretim Üyesi Verileri -->
-                <tr>
-                    <td>Ahmet</td>
-                    <td>Kaya</td>
-
-                    <td class="details-text-container">
-                        <span class="details-icon" data-bs-toggle="modal" data-bs-target="#professorModal" 
-                              onclick="openModal('Ahmet', 'Kaya', 'ahmet.kaya@example.com', 'Bilgisayar Mühendisliği', '555-9876')">
-                            <i class="fas fa-eye"></i>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Elif</td>
-                    <td>Şahin</td>
-
-                    <td class="details-text-container">
-                        <span class="details-icon" data-bs-toggle="modal" data-bs-target="#professorModal" 
-                              onclick="openModal('Elif', 'Şahin', 'elif.sahin@example.com', 'Elektrik-Elektronik Mühendisliği', '555-1234')">
-                            <i class="fas fa-eye"></i>
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<div class="table-container">
+    <div class="table-title">ÖĞRETİM ÜYELERİ</div>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>İsim</th>
+                <th>Soyisim</th>
+                <th>Detay</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Örnek Öğretim Üyesi Verileri -->
+            <tr>
+                <td>Ahmet</td>
+                <td>Kaya</td>
+                <td>
+                    <span class="details-icon" data-bs-toggle="modal" data-bs-target="#professorModal" 
+                          onclick="openModal('Ahmet', 'Kaya', 'ahmet.kaya@example.com', 'Bilgisayar Mühendisliği', '555-9876')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Elif</td>
+                <td>Şahin</td>
+                <td>
+                    <span class="details-icon" data-bs-toggle="modal" data-bs-target="#professorModal" 
+                          onclick="openModal('Elif', 'Şahin', 'elif.sahin@example.com', 'Elektrik-Elektronik Mühendisliği', '555-1234')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <!-- Modal -->

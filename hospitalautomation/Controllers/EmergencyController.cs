@@ -23,6 +23,12 @@ namespace hospitalautomation.Controllers
             _context = context;
         }
 
+   [HttpGet("EmergencyInfo")]
+        public IActionResult EmergencyInfo()
+        {
+            return View("EmergencyInfo");
+        }
+
         [HttpGet("")]
         public IActionResult Index()
         {

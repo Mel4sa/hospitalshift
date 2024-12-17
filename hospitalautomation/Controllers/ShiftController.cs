@@ -20,6 +20,11 @@ namespace hospitalautomation.Controllers
             _logger = logger;
             _context = context;
         }
+        [HttpGet("ShiftInfo")]
+        public IActionResult ShiftInfo()
+        {
+            return View("ShiftInfo");
+        }
 
         [HttpGet("")]
         public async Task<IActionResult> Index()
