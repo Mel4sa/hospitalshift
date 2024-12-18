@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using hospitalautomation.Models;
 using hospitalautomation.Models.Context;
 using hospitalautomation.Models.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace hospitalautomation.Controllers
 {
@@ -22,6 +23,7 @@ namespace hospitalautomation.Controllers
         }
 
         [HttpGet("Interviewtable")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Interviewtable()
         {
             var interviews = _context.Interviews

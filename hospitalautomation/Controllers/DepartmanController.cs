@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using hospitalautomation.Models;
 using hospitalautomation.Models.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -27,6 +28,7 @@ namespace hospitalautomation.Controllers
         }
 
         [HttpGet("")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View("Index");
@@ -36,8 +38,22 @@ namespace hospitalautomation.Controllers
         [HttpGet("DepartmantsInfo")]
         public IActionResult DepartmantsInfo()
         {
-            return View("DepartmantsInfo");
+            // Departman isimlerini tanımlayalım
+            var departmentNames = new List<string>
+            {
+                "Çocuk Acil",
+                "Çocuk Yoğun Bakım",
+                "Çocuk Hematolojisi ve Onkolojisi"
+            };
+
+            // Departmanları isimlerine göre çekelim
+            var departments = _context.Departments
+                .Where(d => departmentNames.Contains(d.Name))
+                .ToList();
+
+            return View(departments); // View'a model olarak gönderiyoruz
         }
+
 
         [HttpGet("get-department")]
         public IActionResult GetDepartment(string name)

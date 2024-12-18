@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using hospitalautomation.Models;
 using hospitalautomation.Models.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -20,13 +22,33 @@ namespace hospitalautomation.Controllers
             _logger = logger;
             _context = context;
         }
+
+        [Authorize]
         [HttpGet("ShiftInfo")]
-        public IActionResult ShiftInfo()
+        public async Task<IActionResult> ShiftInfo()
         {
-            return View("ShiftInfo");
+            // Giriş yapan kullanıcının ID'sini alıyoruz
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // UserId'ye göre Assistant'ı buluyoruz
+            var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.UserId == int.Parse(userId));
+            if (assistant == null)
+            {
+                TempData["Error"] = "Nöbet bilgileri bulunamadı.";
+                return RedirectToAction("Index");
+            }
+
+            // Assistant'a ait nöbetleri çekiyoruz
+            var shifts = await _context.Shifts
+                .Where(s => s.AssistantId == assistant.Id)
+                .Include(s => s.Department) // Department bilgilerini de dahil ediyoruz
+                .ToListAsync();
+
+            return View("ShiftInfo", shifts); // ShiftInfo view'ine gönderiyoruz
         }
 
         [HttpGet("")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var shifts = await _context.Shifts

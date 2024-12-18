@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace hospitalautomation.Controllers
 {
@@ -23,13 +25,40 @@ namespace hospitalautomation.Controllers
             _context = context;
         }
 
-   [HttpGet("EmergencyInfo")]
-        public IActionResult EmergencyInfo()
+        [Authorize]
+        [HttpGet("EmergencyInfo")]
+        public async Task<IActionResult> EmergencyInfo()
         {
-            return View("EmergencyInfo");
+            // Giriş yapan kullanıcının ID'sini alıyoruz
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                TempData["Error"] = "Kullanıcı bilgisi bulunamadı.";
+                return RedirectToAction("Index");
+            }
+
+            int currentUserId = int.Parse(userId);
+
+            var emergencies = await _context.MailEmergencies
+                .Where(me => me.UserId == currentUserId) // Kullanıcıya gönderilmiş olanlar
+                .Include(me => me.Emergency) // Emergency bilgilerini dahil et
+                .OrderByDescending(me => me.Emergency.CreatedAt) // Tarihi en yakın olanlar önce gelsin
+                .Select(me => new
+                {
+                    SenderName = _context.Users.Where(u => u.Id == me.Emergency.UserId).Select(u => u.Email).FirstOrDefault(),
+                    me.Emergency.Title,
+                    me.Emergency.Content,
+                    CreatedDate = me.Emergency.CreatedAt.ToString("dd MMMM yyyy"),
+                    CreatedTime = me.Emergency.CreatedAt.ToString("HH:mm")
+                })
+                .ToListAsync();
+
+            return View("EmergencyInfo", emergencies);
         }
 
         [HttpGet("")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View("Index");

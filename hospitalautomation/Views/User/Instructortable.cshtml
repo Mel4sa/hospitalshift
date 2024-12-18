@@ -100,46 +100,38 @@
                 <th>Detay</th>
             </tr>
         </thead>
-        <tbody>
-            <!-- Örnek Öğretim Üyesi Verileri -->
-            <tr>
-                <td>Ahmet</td>
-                <td>Kaya</td>
-                <td>
-                    <span class="details-icon" data-bs-toggle="modal" data-bs-target="#professorModal" 
-                          onclick="openModal('Ahmet', 'Kaya', 'ahmet.kaya@example.com', 'Bilgisayar Mühendisliği', '555-9876')">
-                        <i class="fas fa-eye"></i>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Elif</td>
-                <td>Şahin</td>
-                <td>
-                    <span class="details-icon" data-bs-toggle="modal" data-bs-target="#professorModal" 
-                          onclick="openModal('Elif', 'Şahin', 'elif.sahin@example.com', 'Elektrik-Elektronik Mühendisliği', '555-1234')">
-                        <i class="fas fa-eye"></i>
-                    </span>
-                </td>
-            </tr>
+         <tbody>
+            @foreach (var instructors in Model)
+            {
+                <tr>
+                    <td>@instructors.FirstName</td>
+                    <td>@instructors.LastName</td>
+                    <td>
+                        <span class="details-icon" data-bs-toggle="modal" data-bs-target="#instructorModal" 
+                              onclick="openModal(@instructors.Id)">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="professorModal" tabindex="-1" aria-labelledby="professorModalLabel" aria-hidden="true">
+<div class="modal fade" id="instructorModal" tabindex="-1" aria-labelledby="instructorModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="professorModalLabel">Öğretim Üyesi Detayları</h5>
+                <h5 class="modal-title" id="instructorModalLabel">Öğretim Üyesi Detayları</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>İsim:</strong> <span id="professorName"></span></p>
-                <p><strong>Soyisim:</strong> <span id="professorSurname"></span></p>
-                <p><strong>Email:</strong> <span id="professorEmail"></span></p>
-                <p><strong>Bölüm:</strong> <span id="professorDepartment"></span></p>
-                <p><strong>Telefon:</strong> <span id="professorPhone"></span></p>
+                <p><strong>İsim:</strong> <span id="instructorName"></span></p>
+                <p><strong>Soyisim:</strong> <span id="instructorSurname"></span></p>
+                <p><strong>Email:</strong> <span id="instructorEmail"></span></p>
+                <p><strong>Adres:</strong> <span id="instructorAddress"></span></p>
+                <p><strong>Telefon:</strong> <span id="instructorPhone"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
@@ -152,13 +144,19 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Modal'ı açmak için fonksiyon
-    function openModal(name, surname, email, department, phone) {
-        document.getElementById('professorName').textContent = name;
-        document.getElementById('professorSurname').textContent = surname;
-        document.getElementById('professorEmail').textContent = email;
-        document.getElementById('professorDepartment').textContent = department;
-        document.getElementById('professorPhone').textContent = phone;
+    function openModal(instructorId) {
+        fetch(`/User/GetInstructorDetails/${instructorId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('instructorName').textContent = data.firstName;
+                document.getElementById('instructorSurname').textContent = data.lastName;
+                document.getElementById('instructorEmail').textContent = data.email;
+                document.getElementById('instructorAddress').textContent = data.address;
+                document.getElementById('instructorPhone').textContent = data.telNo;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 </script>
 

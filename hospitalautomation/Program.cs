@@ -12,8 +12,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Login"; // Giriş yapılmamışsa yönlendirilecek sayfa
-        options.AccessDeniedPath = "/Login/AccessDenied"; // Yetkisiz erişim
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Oturum süresi
+        options.AccessDeniedPath = "/Home/AccessDenied"; // Yetkisiz erişim
     });
 
 // MVC Controller Servisini Ekliyoruz

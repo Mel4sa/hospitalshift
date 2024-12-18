@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 
 namespace hospitalautomation.Models
 {
-    public class MailEmergency:BaseEntity
+   public class MailEmergency : BaseEntity
     {
-        
         public int UserId { get; set; }
+
         [ForeignKey("UserId")]
+        public User User { get; set; }
 
         public int EmergencyId { get; set; }
-        [ForeignKey("EmergencyId")]
 
+        [ForeignKey("EmergencyId")]
+        public Emergency Emergency { get; set; } // Navigation Property
 
         [Required]
         [StringLength(500)]

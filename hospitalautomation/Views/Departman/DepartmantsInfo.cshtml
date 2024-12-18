@@ -1,3 +1,5 @@
+@model List<hospitalautomation.Models.Department>
+
 @{
     ViewData["Title"] = "DepartmantsInfo";
 }
@@ -12,7 +14,7 @@
             .card {
                 border-radius: 15px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                width: 350px; /* Kartların genişliği artırıldı */
+                width: 350px;
             }
 
             .card-icon {
@@ -22,18 +24,6 @@
             .card-title {
                 font-weight: bold;
                 color: #007bff;
-            }
-
-            .card:nth-child(1) .card-title {
-                color: #e91e63;
-            }
-
-            .card:nth-child(2) .card-title {
-                color: #3f51b5;
-            }
-
-            .card:nth-child(3) .card-title {
-                color: #4caf50;
             }
 
             .form-group label {
@@ -46,76 +36,46 @@
             }
         </style>
 
-        <!-- Kart 1 -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-hospital-fill card-icon mb-3" style="color: inherit;"></i>
-                    <h5 class="card-title">Çocuk Acil</h5>
-                    <form>
-                        <div class="form-group mb-3">
-                            <label for="emptyBeds1">Boş Yatak Sayısı</label>
-                            <input type="text" class="form-control" id="emptyBeds1">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="patientsCount1">Hasta Sayısı</label>
-                            <input type="text" class="form-control" id="patientsCount1">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="workingHours1">Açık Olduğu Aralığı</label>
-                            <input type="text" class="form-control" id="workingHours1">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @{
+            var departmentTitles = new string[] 
+            { 
+                "Çocuk Acil", 
+                "Çocuk Yoğun Bakım", 
+                "Çocuk Hematolojisi ve Onkolojisi" 
+            };
+        }
 
-        <!-- Kart 2 -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-heart-pulse-fill card-icon mb-3" style="color: inherit;"></i>
-                    <h5 class="card-title">Çocuk Yoğun Bakım</h5>
-                    <form>
-                        <div class="form-group mb-3">
-                            <label for="emptyBeds2">Boş Yatak Sayısı</label>
-                            <input type="text" class="form-control" id="emptyBeds2">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="patientsCount2">Hasta Sayısı</label>
-                            <input type="text" class="form-control" id="patientsCount2">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="workingHours2">Açık Olduğu Saat Aralığı</label>
-                            <input type="text" class="form-control" id="workingHours2">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @foreach (var title in departmentTitles)
+        {
+            var department = Model.FirstOrDefault(d => d.Name == title);
 
-        <!-- Kart 3 -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-person-fill card-icon mb-3" style="color: inherit;"></i>
-                    <h5 class="card-title">Çocuk Hematolojisi ve Onkolojisi</h5>
-                    <form>
-                        <div class="form-group mb-3">
-                            <label for="emptyBeds3">Boş Yatak Sayısı</label>
-                            <input type="text" class="form-control" id="emptyBeds3">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="patientsCount3">Hasta Sayısı</label>
-                            <input type="text" class="form-control" id="patientsCount3">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="workingHours3">Açık Olduğu Aralığı</label>
-                            <input type="text" class="form-control" id="workingHours3">
-                        </div>
-                    </form>
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="@(title == "Çocuk Acil" ? "bi bi-hospital-fill" 
+                             : title == "Çocuk Yoğun Bakım" ? "bi bi-heart-pulse-fill" 
+                             : "bi bi-person-fill") card-icon mb-3" style="color: inherit;"></i>
+                        <h5 class="card-title">@title</h5>
+                        <form>
+                            <div class="form-group mb-3">
+                                <label>Boş Yatak Sayısı</label>
+                                <input type="text" class="form-control text-center" 
+                                    value="@(department?.EmptybedCount ?? 0)" readonly>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Hasta Sayısı</label>
+                                <input type="text" class="form-control text-center" 
+                                    value="@(department?.PatientCount ?? 0)" readonly>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Çalışma Saatleri</label>
+                                <input type="text" class="form-control text-center" 
+                                       value="@(department != null ? $"{department.StartTime} - {department.EndTime}" : "Kapalı")" readonly>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 </div>

@@ -75,7 +75,7 @@ namespace hospitalautomation.Controllers
         }
 
         // Admin giriş kontrolü (POST)
-        [HttpPost]
+       [HttpPost]
         public IActionResult LoginByAdmin(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -83,12 +83,30 @@ namespace hospitalautomation.Controllers
                 // Kullanıcıyı ve rolünü kontrol et
                 var user = _context.Users
                     .FirstOrDefault(u => u.Email == model.Email &&
-                                         u.Password == model.Password &&
-                                         u.Role == UserRole.Admin);  // UserRole.Admin enum kontrolü
+                                        u.Password == model.Password &&
+                                        u.Role == UserRole.Admin);  // UserRole.Admin enum kontrolü
 
                 if (user != null)
                 {
-                    // Eğer adminse, admin sayfasına yönlendir
+                    // Admin bilgilerini Claims ile sakla
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Kullanıcı ID'si
+                        new Claim(ClaimTypes.Email, user.Email),                 // Kullanıcı E-posta
+                        new Claim(ClaimTypes.Role, user.Role.ToString())         // Kullanıcı Rolü (Admin)
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,                       // Kalıcı oturum
+                        ExpiresUtc = DateTime.UtcNow.AddHours(1)   // Oturum süresi
+                    };
+
+                    // Oturum başlat
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
                     TempData["Message"] = "Admin Girişi Başarılı!";
                     return RedirectToAction("Index", "AdminHome");  // AdminHome controller'ındaki Index action'ına yönlendir
                 }
@@ -100,6 +118,7 @@ namespace hospitalautomation.Controllers
 
             return View("LoginByAdmin", model);  // Admin giriş sayfasına geri döner
         }
+
     }
 
     // Giriş modeli

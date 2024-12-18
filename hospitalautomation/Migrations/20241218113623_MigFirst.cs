@@ -58,25 +58,6 @@ namespace hospitalautomation.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "MailEmergencies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    EmergencyId = table.Column<int>(type: "int", nullable: false),
-                    MailContent = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MailEmergencies", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -154,6 +135,37 @@ namespace hospitalautomation.Migrations
                     table.PrimaryKey("PK_Instructors", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Instructors_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "MailEmergencies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    EmergencyId = table.Column<int>(type: "int", nullable: false),
+                    MailContent = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MailEmergencies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MailEmergencies_Emergencies_EmergencyId",
+                        column: x => x.EmergencyId,
+                        principalTable: "Emergencies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MailEmergencies_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -246,6 +258,16 @@ namespace hospitalautomation.Migrations
                 column: "InstructorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MailEmergencies_EmergencyId",
+                table: "MailEmergencies",
+                column: "EmergencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MailEmergencies_UserId",
+                table: "MailEmergencies",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Shifts_AssistantId",
                 table: "Shifts",
                 column: "AssistantId");
@@ -260,9 +282,6 @@ namespace hospitalautomation.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Emergencies");
-
-            migrationBuilder.DropTable(
                 name: "Interviews");
 
             migrationBuilder.DropTable(
@@ -273,6 +292,9 @@ namespace hospitalautomation.Migrations
 
             migrationBuilder.DropTable(
                 name: "Instructors");
+
+            migrationBuilder.DropTable(
+                name: "Emergencies");
 
             migrationBuilder.DropTable(
                 name: "Assistants");

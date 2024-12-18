@@ -11,7 +11,7 @@ using hospitalautomation.Models.Context;
 namespace hospitalautomation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241215202257_MigFirst")]
+    [Migration("20241218113623_MigFirst")]
     partial class MigFirst
     {
         /// <inheritdoc />
@@ -247,6 +247,10 @@ namespace hospitalautomation.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmergencyId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("MailEmergencies");
                 });
 
@@ -356,6 +360,25 @@ namespace hospitalautomation.Migrations
                     b.Navigation("Assistant");
 
                     b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("hospitalautomation.Models.MailEmergency", b =>
+                {
+                    b.HasOne("hospitalautomation.Models.Emergency", "Emergency")
+                        .WithMany()
+                        .HasForeignKey("EmergencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("hospitalautomation.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Emergency");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("hospitalautomation.Models.Shift", b =>

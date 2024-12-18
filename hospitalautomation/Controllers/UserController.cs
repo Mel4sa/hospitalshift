@@ -2,6 +2,7 @@ using hospitalautomation.Models;
 using hospitalautomation.Models.Context;
 using hospitalautomation.Models.Dtos;
 using hospitalautomation.Models.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,18 +22,67 @@ namespace hospitalautomation.Controllers
 
 
         [HttpGet("Instructortable")]
-        public IActionResult Instructortable()
+        public async Task<IActionResult>Instructortable()
         {
-            return View("Instructortable");
+             var instructors = await _context.Instructors
+                .Where(a => !a.IsDeleted) // IsDeleted = false olanlar
+                .ToListAsync();
+
+            return View(instructors);
+        }
+
+        [HttpGet("GetInstructorDetails/{id}")]
+        public async Task<IActionResult> GetInstructorDetails(int id)
+        {
+            var instructor = await _context.Instructors
+                .Where(a => a.Id == id && !a.IsDeleted)
+                .FirstOrDefaultAsync();
+
+            if (instructor == null)
+                return NotFound();
+
+            return Json(new
+            {
+                instructor.FirstName,
+                instructor.LastName,
+                instructor.Email,
+                instructor.Address,
+                instructor.TelNo
+            });
         }
 
         [HttpGet("Assistantable")]
-        public IActionResult Assistantable()
+        public async Task<IActionResult> Assistantable()
         {
-            return View("Assistantable");
+            var assistants = await _context.Assistants
+                .Where(a => !a.IsDeleted) // IsDeleted = false olanlar
+                .ToListAsync();
+
+            return View(assistants);
+        }
+
+        [HttpGet("GetAssistantDetails/{id}")]
+        public async Task<IActionResult> GetAssistantDetails(int id)
+        {
+            var assistant = await _context.Assistants
+                .Where(a => a.Id == id && !a.IsDeleted)
+                .FirstOrDefaultAsync();
+
+            if (assistant == null)
+                return NotFound();
+
+            return Json(new
+            {
+                assistant.FirstName,
+                assistant.LastName,
+                assistant.Email,
+                assistant.Address,
+                assistant.TelNo
+            });
         }
 
         [HttpGet("create")]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateUser()
         {
             return View("Index");
@@ -102,7 +152,9 @@ namespace hospitalautomation.Controllers
             }
             return View("Index"); // Eğer form geçerli değilse tekrar formu göster
         }
+
         [HttpGet("")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var users = await _context.Users

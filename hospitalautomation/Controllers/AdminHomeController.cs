@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using hospitalautomation.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -16,6 +17,7 @@ namespace hospitalautomation.Controllers
         }
 
         [HttpGet("")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
