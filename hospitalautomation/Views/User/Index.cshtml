@@ -142,12 +142,25 @@
                         <label for="Password" class="gradient-text">Şifre</label>
                         <input type="password" class="form-control" id="Password" name="Password" required />
                     </div>
-                    <div class="form-group mb-3">
+                   <div class="form-group mb-3">
                         <label for="Role" class="gradient-text">Rol</label>
-                        <select class="form-control" id="Role" name="Role" required>
+                        <select class="form-control" id="Role" name="Role" required onchange="handleRoleChange()">
                             <option value="">Rol Seçin</option>
                             <option value="1">Asistan</option>
                             <option value="2">Öğretim Üyesi</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3" id="departmentGroup" style="display: none;">
+                        <label for="DepartmentId" class="gradient-text">Departman</label>
+                        <select class="form-control" id="DepartmentId" name="DepartmentId">
+                            <option value="">Departman Seçin</option>
+                            @if (ViewBag.Departments != null)
+                            {
+                                @foreach (var department in ViewBag.Departments)
+                                {
+                                    <option value="@department.Id">@department.Name</option>
+                                }
+                            }
                         </select>
                     </div>
                     <div class="form-group mb-3">
@@ -172,55 +185,6 @@
         </div>
     </div>
 </div>
-<!-- Güncelleme Modal'ı -->
-<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createUserModalLabel">Yeni Kullanıcı Oluştur</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form asp-action="CreateUser" method="post">
-                    <div class="form-group mb-3">
-                        <label for="CreateEmail" class="gradient-text">Email</label>
-                        <input type="email" class="form-control" id="CreateEmail" name="Email" required />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="CreatePassword" class="gradient-text">Şifre</label>
-                        <input type="password" class="form-control" id="CreatePassword" name="Password" required />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="CreateRole" class="gradient-text">Rol</label>
-                        <select class="form-control" id="CreateRole" name="Role" required>
-                            <option value="">Rol Seçin</option>
-                            <option value="1">Asistan</option>
-                            <option value="2">Öğretim Üyesi</option>
-                        </select>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="CreateFirstName" class="gradient-text">Ad</label>
-                        <input type="text" class="form-control" id="CreateFirstName" name="FirstName" required />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="CreateLastName" class="gradient-text">Soyad</label>
-                        <input type="text" class="form-control" id="CreateLastName" name="LastName" required />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="CreateAddress" class="gradient-text">Adres</label>
-                        <input type="text" class="form-control" id="CreateAddress" name="Address" required />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="CreateTelNo" class="gradient-text">Telefon Numarası</label>
-                        <input type="number" class="form-control" id="CreateTelNo" name="TelNo" required />
-                    </div>
-                    <button type="submit" class="btn btn-gradient-blue">Kullanıcı Oluştur</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Güncelleme Modal'ı -->
 <div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -294,5 +258,21 @@
             .catch(error => {
                 alert(error.message);
             });
+    }
+  function handleRoleChange() {
+        const role = document.getElementById("Role").value;
+        const departmentGroup = document.getElementById("departmentGroup");
+        const departmentInput = document.getElementById("DepartmentId");
+
+        if (role === "2") { // Öğretim Üyesi
+            departmentGroup.style.display = "block"; // Departman alanını göster
+            if (departmentInput) departmentInput.required = true; // Gerekli hale getir
+        } else { // Asistan
+            departmentGroup.style.display = "none"; // Departman alanını gizle
+            if (departmentInput) {
+                departmentInput.required = false; // Zorunlu alanı kaldır
+                departmentInput.value = ""; // Değeri temizle
+            }
+        }
     }
 </script>

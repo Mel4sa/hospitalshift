@@ -22,11 +22,11 @@ namespace hospitalautomation.Controllers
 
 
         [HttpGet("Instructortable")]
-        public async Task<IActionResult>Instructortable()
+        public async Task<IActionResult> Instructortable()
         {
-             var instructors = await _context.Instructors
-                .Where(a => !a.IsDeleted) // IsDeleted = false olanlar
-                .ToListAsync();
+            var instructors = await _context.Instructors
+               .Where(a => !a.IsDeleted) // IsDeleted = false olanlar
+               .ToListAsync();
 
             return View(instructors);
         }
@@ -93,64 +93,70 @@ namespace hospitalautomation.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Kullanıcıyı User entity'sine dönüştürüyoruz
-                var user = new User
+                try
                 {
-                    Email = userDto.Email,
-                    Password = userDto.Password,
-                    Role = userDto.Role,
-                    // Diğer gerekli alanları da ekleyin
-                };
-
-                // Kullanıcıyı veritabanına kaydediyoruz
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-
-                // Kaydedilen kullanıcı ID'sini alıyoruz
-                var userId = user.Id;
-
-                // Role'e göre veri ekleme işlemi
-                if (user.Role == UserRole.Asistan)
-                {
-                    var assistant = new Assistant
+                    var user = new User
                     {
-                        UserId = userId, // User tablosundan gelen ID
-                        FirstName = userDto.FirstName,
-                        LastName = userDto.LastName,
                         Email = userDto.Email,
-                        Address = userDto.Address,
-                        TelNo = userDto.TelNo,
+                        Password = userDto.Password,
+                        Role = userDto.Role,
                     };
-                    _context.Assistants.Add(assistant);
-                }
-                else if (user.Role == UserRole.ÖğretimÜyesi)
-                {
-                    var instructor = new Instructor
-                    {
-                        UserId = userId, // User tablosundan gelen ID
-                        FirstName = userDto.FirstName,
-                        LastName = userDto.LastName,
-                        Email = userDto.Email,
-                        Address = userDto.Address,
-                        TelNo = userDto.TelNo,
-                    };
-                    _context.Instructors.Add(instructor);
-                }
 
-                await _context.SaveChangesAsync();
-                TempData["Message"] = "Başarılı!";
-                return RedirectToAction("Index"); // Başka bir sayfaya yönlendir
+                    _context.Users.Add(user);
+                    await _context.SaveChangesAsync();
+
+                    var userId = user.Id;
+
+                    if (user.Role == UserRole.Asistan)
+                    {
+                        var assistant = new Assistant
+                        {
+                            UserId = userId,
+                            FirstName = userDto.FirstName,
+                            LastName = userDto.LastName,
+                            Email = userDto.Email,
+                            Address = userDto.Address,
+                            TelNo = userDto.TelNo,
+                        };
+                        _context.Assistants.Add(assistant);
+                    }
+                    if (user.Role == UserRole.ÖğretimÜyesi)
+                    {
+                        if (!userDto.DepartmentId.HasValue)
+                        {
+                            TempData["Error"] = "Bölüm seçilmesi zorunludur.";
+                            return RedirectToAction("Index");
+                        }
+
+                        var instructor = new Instructor
+                        {
+                            UserId = userId,
+                            FirstName = userDto.FirstName,
+                            LastName = userDto.LastName,
+                            Email = userDto.Email,
+                            Address = userDto.Address,
+                            TelNo = userDto.TelNo,
+                            DepartmentId = userDto.DepartmentId.Value // Nullable int'i int'e çeviriyoruz.
+                        };
+
+                        _context.Instructors.Add(instructor);
+                    }
+
+                    await _context.SaveChangesAsync();
+                    TempData["Message"] = "Kullanıcı başarıyla eklendi.";
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    TempData["Error"] = $"Bir hata oluştu: {ex.Message}";
+                }
             }
-
-            if (!ModelState.IsValid)
+            else
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                foreach (var error in errors)
-                {
-                    Console.WriteLine(error); // Veya loglama yapabilirsiniz
-                }
+                TempData["Error"] = "Formda eksik veya hatalı bilgiler var.";
             }
-            return View("Index"); // Eğer form geçerli değilse tekrar formu göster
+
+            return RedirectToAction("Index");
         }
 
         [HttpGet("")]
@@ -180,7 +186,13 @@ namespace hospitalautomation.Controllers
                         ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.TelNo
                         : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.TelNo,
             }).ToList();
+            // Departmanları çekiyoruz
+            var departments = await _context.Departments
+                .Where(d => !d.IsDeleted)
+                .Select(d => new { d.Id, d.Name })
+                .ToListAsync();
 
+            ViewBag.Departments = departments;
             return View(userDtos); // UserDto türünde model gönderiliyor.
         }
         [HttpPost("delete")]
@@ -257,7 +269,8 @@ namespace hospitalautomation.Controllers
                     instructor.FirstName,
                     instructor.LastName,
                     instructor.Address,
-                    instructor.TelNo
+                    instructor.TelNo,
+
                 });
             }
 

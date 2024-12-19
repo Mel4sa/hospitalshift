@@ -11,8 +11,10 @@ namespace hospitalautomation.Models
 {
     public int UserId { get; set; }
     [ForeignKey("UserId")]
-    public User User { get; set; }
-
+    public virtual User User { get; set; }
+    public int DepartmentId { get; set; }
+    [ForeignKey("DepartmentId")]
+    public virtual Department Department { get; set; }
     [Required]
     [StringLength(50)]
     public required string FirstName { get; set; }
@@ -32,5 +34,6 @@ namespace hospitalautomation.Models
     [Required]
     [StringLength(50)]
     public required string Address { get; set; }
+    
 }
 }

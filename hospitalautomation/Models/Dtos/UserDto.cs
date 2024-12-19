@@ -34,5 +34,6 @@ namespace hospitalautomation.Models.Dtos
         [Required(ErrorMessage = "Telefon numarası zorunludur.")]
         [StringLength(15, ErrorMessage = "Telefon numarası en fazla 15 karakter olabilir.")]
         public string TelNo { get; set; }
+        public int? DepartmentId { get; set; }
     }
 }

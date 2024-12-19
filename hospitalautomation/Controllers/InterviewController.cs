@@ -8,6 +8,7 @@ using hospitalautomation.Models;
 using hospitalautomation.Models.Context;
 using hospitalautomation.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace hospitalautomation.Controllers
 {
@@ -27,7 +28,6 @@ namespace hospitalautomation.Controllers
         public IActionResult Interviewtable()
         {
             var interviews = _context.Interviews
-                .Where(i => !i.IsDeleted)
                 .OrderBy(i => i.ShiftDate)
                 .Select(i => new InterviewDto
                 {
@@ -40,13 +40,14 @@ namespace hospitalautomation.Controllers
                         .Select(inst => $"{inst.FirstName} {inst.LastName}")
                         .FirstOrDefault(),
                     ShiftDate = i.ShiftDate,
-                    Status = i.ShiftDate >= DateTime.Today ? "Aktif" : "Geçmiş"
+                    Status = i.IsDeleted
+        ? "İptal"
+        : (i.ShiftDate >= DateTime.Today ? "Aktif" : "Geçmiş")
                 })
                 .ToList();
 
             return View(interviews);
         }
-
 
         [HttpGet("")]
         public IActionResult Index()
@@ -60,46 +61,74 @@ namespace hospitalautomation.Controllers
             bool isInstructor = User.IsInRole("ÖğretimÜyesi");
             ViewBag.IsInstructor = isInstructor;
 
-            int numericUserId;
-            if (!int.TryParse(userId, out numericUserId))
+            bool isAsistan = User.IsInRole("Asistan");
+            ViewBag.IsAsistan = isAsistan;
+
+            if (!int.TryParse(userId, out int numericUserId))
             {
                 _logger.LogError("User ID parsing failed.");
                 return BadRequest("Geçersiz kullanıcı kimliği.");
             }
 
-            List<Interview> interviews;
+            List<Interview> interviews = new List<Interview>();
+            DateTime today = DateTime.Today;
 
-           if (isInstructor)
+            if (isInstructor)
             {
-                // InstructorId'yi Instructor tablosundan UserId ile bulma
                 var instructor = _context.Instructors.FirstOrDefault(i => i.UserId == numericUserId);
-                // InstructorId ile Interviews filtreleme
-                 interviews = _context.Interviews
-                        .Where(i => i.InstructorId == instructor.Id && !i.IsDeleted)
-                        .OrderBy(i => i.ShiftDate)
-                        .ToList();
+                if (instructor == null)
+                {
+                    _logger.LogError("Instructor bulunamadı.");
+                    return BadRequest("Instructor bulunamadı.");
+                }
+
+                interviews = _context.Interviews
+                    .Where(i => i.InstructorId == instructor.Id && !i.IsDeleted && i.ShiftDate >= today) // Bugünden sonraki kayıtlar
+                    .OrderBy(i => i.ShiftDate)
+                    .ToList();
+            }
+            else if (isAsistan)
+            {
+                var assistant = _context.Assistants.FirstOrDefault(i => i.UserId == numericUserId);
+                if (assistant == null)
+                {
+                    _logger.LogError("Assistant bulunamadı.");
+                    return BadRequest("Assistant bulunamadı.");
+                }
+
+                interviews = _context.Interviews
+                    .Where(i => i.AssistantId == assistant.Id && !i.IsDeleted && i.ShiftDate >= today) // Bugünden sonraki kayıtlar
+                    .OrderBy(i => i.ShiftDate)
+                    .ToList();
             }
             else
             {
-                var assistant = _context.Assistants.FirstOrDefault(i => i.UserId == numericUserId);
-
-                interviews = _context.Interviews
-                .Where(i => i.AssistantId == assistant.Id && !i.IsDeleted)
-                .OrderBy(i => i.ShiftDate)
-                .ToList();
+                _logger.LogError("User role is neither Instructor nor Asistan.");
+                return BadRequest("Geçersiz kullanıcı rolü.");
             }
 
-            ViewBag.Instructors = _context.Instructors.ToList();
-            ViewBag.Assistants = _context.Assistants.ToList();
-            ViewBag.FutureInterview = interviews
-                .Where(i => i.ShiftDate >= DateTime.Today)
-                .OrderBy(i => i.ShiftDate)
-                .ThenBy(i => i.StartTime)
-                .FirstOrDefault();
+            // Kullanıcıya ait zamanı geçmemiş randevuyu getir
+            var futureInterview = interviews.FirstOrDefault();
+            ViewBag.FutureInterview = futureInterview;
 
-            return View(interviews);
+            var instructors = _context.Instructors
+                .Include(i => i.Department)
+                .Where(i => !i.IsDeleted)
+                .ToList();
+
+            var assistants = _context.Assistants
+                .Where(a => !a.IsDeleted)
+                .ToList();
+
+            var viewModel = new InterViewViewModel
+            {
+                Instructors = instructors,
+                Assistants = assistants,
+                Interviews = interviews
+            };
+
+            return View(viewModel);
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -108,51 +137,66 @@ namespace hospitalautomation.Controllers
         }
 
         // Randevu Alma İşlemi
-       [HttpPost("CreateInterview")]
-public IActionResult CreateInterview(int instructorId, DateTime shiftDate, DateTime startTime, DateTime endTime)
-{
-    // Giriş yapan kullanıcının UserId'sini al
-    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    if (string.IsNullOrEmpty(userId))
-        return RedirectToAction("Index", "Login");
+        [HttpPost("CreateInterview")]
+        public IActionResult CreateInterview(int instructorId, DateTime shiftDate, DateTime startTime, DateTime endTime)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Index", "Login");
 
-    // UserId ile Assistant tablosundan eşleşen kaydı al
-    var assistant = _context.Assistants.FirstOrDefault(a => a.UserId == int.Parse(userId));
-    if (assistant == null)
-    {
-        TempData["ErrorMessage"] = "Bu kullanıcıya bağlı bir asistan bulunamadı.";
-        return RedirectToAction("Index");
-    }
+            // Assistant doğrulama
+            var assistant = _context.Assistants.FirstOrDefault(a => a.UserId == int.Parse(userId));
+            if (assistant == null)
+            {
+                TempData["ErrorMessage"] = "Bu kullanıcıya bağlı bir asistan bulunamadı.";
+                return RedirectToAction("Index");
+            }
 
-    // Randevu çakışma kontrolü
-    var existingInterview = _context.Interviews
-        .FirstOrDefault(i => i.InstructorId == instructorId
-                             && i.ShiftDate == shiftDate
-                             && i.StartTime <= endTime
-                             && i.EndTime >= startTime);
+            // Instructor doğrulama
+            var instructor = _context.Instructors.FirstOrDefault(i => i.Id == instructorId && !i.IsDeleted);
+            if (instructor == null)
+            {
+                TempData["ErrorMessage"] = "Seçilen öğretim üyesi bulunamadı.";
+                return RedirectToAction("Index");
+            }
 
-    if (existingInterview != null)
-    {
-        TempData["ErrorMessage"] = "Bu öğretim üyesi için belirtilen tarihte başka bir randevu var.";
-        return RedirectToAction("Index");
-    }
+            // Mevcut randevuyu bul
+            var existingInterview = _context.Interviews
+                .FirstOrDefault(i => i.AssistantId == assistant.Id && i.ShiftDate >= DateTime.Today);
 
-    // Yeni randevu oluşturma
-    var newInterview = new Interview
-    {
-        AssistantId = assistant.Id, // Asistan Id'sini buraya yaz
-        InstructorId = instructorId,
-        ShiftDate = shiftDate,
-        StartTime = startTime,
-        EndTime = endTime,
-    };
+            if (existingInterview != null)
+            {
+                // Mevcut randevuyu güncelle
+                existingInterview.InstructorId = instructorId;
+                existingInterview.ShiftDate = shiftDate;
+                existingInterview.StartTime = startTime;
+                existingInterview.EndTime = endTime;
 
-    _context.Interviews.Add(newInterview);
-    _context.SaveChanges();
+                _context.Interviews.Update(existingInterview);
+                _context.SaveChanges();
 
-    TempData["SuccessMessage"] = "Randevu başarıyla oluşturuldu.";
-    return RedirectToAction("Index");
-}
+                TempData["SuccessMessage"] = "Randevu başarıyla güncellendi.";
+            }
+            else
+            {
+                // Yeni randevu oluştur
+                var newInterview = new Interview
+                {
+                    AssistantId = assistant.Id,
+                    InstructorId = instructorId,
+                    ShiftDate = shiftDate,
+                    StartTime = startTime,
+                    EndTime = endTime,
+                };
+
+                _context.Interviews.Add(newInterview);
+                _context.SaveChanges();
+
+                TempData["SuccessMessage"] = "Randevu başarıyla oluşturuldu.";
+            }
+
+            return RedirectToAction("Index");
+        }
 
         // Randevu İptali
         [HttpPost("CancelInterview")]
@@ -162,10 +206,16 @@ public IActionResult CreateInterview(int instructorId, DateTime shiftDate, DateT
             if (interview == null)
                 return NotFound("Randevu bulunamadı.");
 
-               interview.IsDeleted = true;
-                _context.Interviews.Update(interview);
-                _context.SaveChanges();
+            interview.IsDeleted = true;
+            _context.Interviews.Update(interview);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
     }
+}
+public class InterViewViewModel
+{
+    public List<Instructor> Instructors { get; set; }
+    public List<Assistant> Assistants { get; set; }
+    public List<Interview> Interviews { get; set; }
 }

@@ -50,9 +50,9 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
     // Seed Data: Admin User
     modelBuilder.Entity<User>().HasData(new User
     {
-        Id = 1, // Id değerini manuel vermeniz gerekiyor.
+        Id = 1, 
         Email = "admin@gmail.com",
-        Password = "admin123", // Not: Parolalar genellikle hashlenir, burada sadece örnek için düz metin kullanılmıştır.
+        Password = "admin123", 
         Role = UserRole.Admin,
         CreatedDate = DateTime.Now,
         IsDeleted = false

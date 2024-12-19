@@ -1,4 +1,4 @@
-@model List<hospitalautomation.Models.Interview>
+@model InterViewViewModel
 @{
     ViewData["Title"] = "Index";
 }
@@ -260,40 +260,35 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model != null && Model.Any())
-                            {
-                                var assistants = ViewBag.Assistants as List<hospitalautomation.Models.Assistant>;
-                                foreach (var interview in Model)
-                                {
-                                    var assistant = assistants?.FirstOrDefault(a => a.Id == interview.AssistantId);
-                                    var assistantName = assistant != null 
-                                        ? $"{assistant.FirstName} {assistant.LastName}".Trim() 
-                                        : "Bilinmeyen Asistan";
-
-                                    <tr>
-                                        <td>@assistantName</td>
-                                        <td>@interview.ShiftDate.ToString("dd.MM.yyyy")</td>
-                                        <td>@interview.StartTime.ToString("HH:mm") - @interview.EndTime.ToString("HH:mm")</td>
-                                        <td>Aktif</td>
-                                        <td>
-                                            <form asp-action="CancelInterview" method="post">
-                                                <input type="hidden" name="interviewId" value="@interview.Id" />
-                                                <button type="submit" class="btn btn-danger btn-sm" 
-                                                        onclick="return confirm('Randevuyu iptal etmek istediğinizden emin misiniz?');">
-                                                    İptal Et
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted">Henüz bir randevunuz bulunmamaktadır.</td>
-                                </tr>
-                            }
-                        </tbody>
+            @if (Model.Assistants != null && Model.Assistants.Any())
+                {
+                    foreach (var interview in Model.Interviews)
+                    {
+                        var asistant = Model.Assistants.FirstOrDefault(i => i.Id == interview.AssistantId);
+                        <tr>
+                            <td>@(asistant != null ? $"{asistant.FirstName} {asistant.LastName}" : "Bilinmiyor")</td>
+                            <td>@interview.ShiftDate.ToString("dd.MM.yyyy")</td>
+                            <td>@interview.StartTime.ToString("HH:mm") - @interview.EndTime.ToString("HH:mm")</td>
+                            <td>@(interview.ShiftDate >= DateTime.Today ? "Aktif" : "Geçmiş")</td>
+                            <td>
+                                <form asp-action="CancelInterview" method="post">
+                                    <input type="hidden" name="interviewId" value="@interview.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm" 
+                                            onclick="return confirm('Randevuyu iptal etmek istediğinizden emin misiniz?');">
+                                        İptal Et
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">Henüz bir asistan kaydı yok.</td>
+                    </tr>
+                }
+        </tbody>
                     </table>
                 </div>
                 <div class="modal-footer">
@@ -304,8 +299,9 @@
     </div>
 }
 
-
-<!-- Randevu Al Modal -->
+   @if ((bool)ViewBag.IsAsistan)
+   {
+    <!-- Randevu Al Modal -->
     <div class="modal fade" id="randevuModal" tabindex="-1" aria-labelledby="randevuModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -315,23 +311,31 @@
             </div>
             <div class="modal-body">
                 <form asp-action="CreateInterview" asp-controller="Interview" method="post">
-    <!-- Öğretim Üyesi Seçimi -->
     <div class="mb-3">
-        <select class="form-select" id="ogretimUyesi" name="InstructorId" required>
-            <option selected disabled>Bir öğretim üyesi seçin</option>
-            @if (ViewBag.Instructors != null)
+    <select class="form-select" id="ogretimUyesi" name="InstructorId" onchange="showDepartment()" required>
+        <option selected disabled>Bir öğretim üyesi seçin</option>
+        @if (Model.Instructors != null && Model.Instructors.Any())
+        {
+            foreach (var instructor in Model.Instructors)
             {
-                @foreach (var instructor in ViewBag.Instructors) 
-                {
-                    <option value="@instructor.Id">@instructor.FirstName</option>
-                }
+                <option value="@instructor.Id" 
+                        data-department="@instructor.Department.Name">
+                    @instructor.FirstName @instructor.LastName
+                </option>
             }
-            else
-            {
-                <option disabled>Sistemde öğretim üyesi bulunamadı</option>
-            }
-        </select>
-    </div>
+        }
+        else
+        {
+            <option disabled>Sistemde öğretim üyesi bulunamadı</option>
+        }
+    </select>
+</div>
+
+<!-- Departman Bilgisi -->
+<div class="mb-3">
+    <label for="department" class="form-label">Departman</label>
+    <input type="text" id="department" class="form-control" readonly />
+</div>
 
     <!-- Tarih Seçimi -->
     <div class="mb-3">
@@ -368,5 +372,15 @@
         </div>
       </div>
     </div>
+   }
+
 </body>
 </html>
+<script>
+    function showDepartment() {
+        const select = document.getElementById("ogretimUyesi");
+        const selectedOption = select.options[select.selectedIndex];
+        const department = selectedOption.getAttribute("data-department");
+        document.getElementById("department").value = department || "Bilinmiyor";
+    }
+</script>

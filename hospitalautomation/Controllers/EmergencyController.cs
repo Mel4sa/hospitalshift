@@ -98,7 +98,7 @@ namespace hospitalautomation.Controllers
                 .Select(u => new { u.Id, u.Email })
                 .ToListAsync();
 
-            // SMTP ayarları
+
             var smtpHost = "smtp.gmail.com";
             var smtpPort = 587;
             var smtpUser = "melisaxsimsek@gmail.com";
@@ -109,10 +109,8 @@ namespace hospitalautomation.Controllers
                 client.EnableSsl = true;
                 client.Credentials = new NetworkCredential(smtpUser, smtpPass);
 
-                // Gönderilen mail içeriği
                 var mailBody = Content + Environment.NewLine +
                                "Oluşturulma Tarihi: " + createdAt.ToString("yyyy-MM-dd HH:mm");
-
                 foreach (var usr in users)
                 {
                     var mail = new MailMessage
@@ -122,32 +120,24 @@ namespace hospitalautomation.Controllers
                         Body = mailBody
                     };
                     mail.To.Add(usr.Email);
-
                     try
                     {
                         await client.SendMailAsync(mail);
-
-                        // Mail gönderim başarılı ise MailEmergency tablosuna kayıt ekleyelim
                         var mailEmergency = new MailEmergency
                         {
                             UserId = usr.Id,
                             EmergencyId = emergency.Id,
                             MailContent = mailBody
                         };
-
                         _context.MailEmergencies.Add(mailEmergency);
-                        // Burada SaveChangesAsync'i mail gönderim döngüsünün sonunda 1 kere çağırabiliriz.
                     }
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, "Mail gönderim hatası");
                     }
                 }
-
-                // Tüm mailler gönderildikten sonra toplu olarak kaydedelim
                 await _context.SaveChangesAsync();
             }
-
             TempData["Success"] = "Acil durum kaydedildi, kullanıcılara mail gönderildi ve MailEmergency tablosuna kayıtlar eklendi.";
             return RedirectToAction("Index");
         }
