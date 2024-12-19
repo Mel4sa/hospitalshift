@@ -108,42 +108,51 @@ namespace hospitalautomation.Controllers
         }
 
         // Randevu Alma İşlemi
-        [HttpPost("CreateInterview")]
-        public IActionResult CreateInterview(int instructorId, DateTime shiftDate, DateTime startTime, DateTime endTime)
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-                return RedirectToAction("Index", "Login");
+       [HttpPost("CreateInterview")]
+public IActionResult CreateInterview(int instructorId, DateTime shiftDate, DateTime startTime, DateTime endTime)
+{
+    // Giriş yapan kullanıcının UserId'sini al
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    if (string.IsNullOrEmpty(userId))
+        return RedirectToAction("Index", "Login");
 
-            // Randevu Çakışma Kontrolü
-            var existingInterview = _context.Interviews
-                .FirstOrDefault(i => i.InstructorId == instructorId
-                                     && i.ShiftDate == shiftDate
-                                     && i.StartTime <= endTime
-                                     && i.EndTime >= startTime);
+    // UserId ile Assistant tablosundan eşleşen kaydı al
+    var assistant = _context.Assistants.FirstOrDefault(a => a.UserId == int.Parse(userId));
+    if (assistant == null)
+    {
+        TempData["ErrorMessage"] = "Bu kullanıcıya bağlı bir asistan bulunamadı.";
+        return RedirectToAction("Index");
+    }
 
-            if (existingInterview != null)
-            {
-                TempData["ErrorMessage"] = "Bu öğretim üyesi için belirtilen tarihte başka bir randevu var.";
-                return RedirectToAction("Index");
-            }
+    // Randevu çakışma kontrolü
+    var existingInterview = _context.Interviews
+        .FirstOrDefault(i => i.InstructorId == instructorId
+                             && i.ShiftDate == shiftDate
+                             && i.StartTime <= endTime
+                             && i.EndTime >= startTime);
 
-            // Yeni Randevu Oluşturma
-            var newInterview = new Interview
-            {
-                AssistantId = int.Parse(userId),
-                InstructorId = instructorId,
-                ShiftDate = shiftDate,
-                StartTime = startTime,
-                EndTime = endTime,
-            };
+    if (existingInterview != null)
+    {
+        TempData["ErrorMessage"] = "Bu öğretim üyesi için belirtilen tarihte başka bir randevu var.";
+        return RedirectToAction("Index");
+    }
 
-            _context.Interviews.Add(newInterview);
-            _context.SaveChanges();
+    // Yeni randevu oluşturma
+    var newInterview = new Interview
+    {
+        AssistantId = assistant.Id, // Asistan Id'sini buraya yaz
+        InstructorId = instructorId,
+        ShiftDate = shiftDate,
+        StartTime = startTime,
+        EndTime = endTime,
+    };
 
-            TempData["SuccessMessage"] = "Randevu başarıyla oluşturuldu.";
-            return RedirectToAction("Index");
-        }
+    _context.Interviews.Add(newInterview);
+    _context.SaveChanges();
+
+    TempData["SuccessMessage"] = "Randevu başarıyla oluşturuldu.";
+    return RedirectToAction("Index");
+}
 
         // Randevu İptali
         [HttpPost("CancelInterview")]

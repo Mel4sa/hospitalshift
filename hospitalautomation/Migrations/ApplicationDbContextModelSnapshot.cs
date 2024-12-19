@@ -316,6 +316,17 @@ namespace hospitalautomation.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2024, 12, 19, 13, 5, 14, 479, DateTimeKind.Local).AddTicks(4120),
+                            Email = "admin@gmail.com",
+                            IsDeleted = false,
+                            Password = "admin123",
+                            Role = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("hospitalautomation.Models.Assistant", b =>

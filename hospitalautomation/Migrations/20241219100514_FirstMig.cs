@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace hospitalautomation.Migrations
 {
     /// <inheritdoc />
-    public partial class MigFirst : Migration
+    public partial class FirstMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -236,6 +236,11 @@ namespace hospitalautomation.Migrations
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedDate", "Email", "IsDeleted", "Password", "Role" },
+                values: new object[] { 1, new DateTime(2024, 12, 19, 13, 5, 14, 479, DateTimeKind.Local).AddTicks(4120), "admin@gmail.com", false, "admin123", "Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assistants_UserId",

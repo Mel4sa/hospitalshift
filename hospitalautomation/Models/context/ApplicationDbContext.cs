@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using hospitalautomation.Models.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -21,16 +22,18 @@ public class ApplicationDbContext : DbContext
             });
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
 
-        // User entity'sinin Role özelliğini string'e çevirmek için
-        modelBuilder.Entity<User>()
-            .Property(u => u.Role)
-            .HasConversion<string>();
 
-       // Assistant-User ilişkilendirmesi
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    base.OnModelCreating(modelBuilder);
+
+    // User entity'sinin Role özelliğini string'e çevirmek için
+    modelBuilder.Entity<User>()
+        .Property(u => u.Role)
+        .HasConversion<string>();
+
+    // Assistant-User ilişkilendirmesi
     modelBuilder.Entity<Assistant>()
         .HasOne(a => a.User)
         .WithMany()
@@ -43,7 +46,18 @@ public class ApplicationDbContext : DbContext
         .WithMany()
         .HasForeignKey(i => i.UserId)
         .OnDelete(DeleteBehavior.Cascade);
-    }
+
+    // Seed Data: Admin User
+    modelBuilder.Entity<User>().HasData(new User
+    {
+        Id = 1, // Id değerini manuel vermeniz gerekiyor.
+        Email = "admin@gmail.com",
+        Password = "admin123", // Not: Parolalar genellikle hashlenir, burada sadece örnek için düz metin kullanılmıştır.
+        Role = UserRole.Admin,
+        CreatedDate = DateTime.Now,
+        IsDeleted = false
+    });
+}
 
     public DbSet<User> Users { get; set; }
     public DbSet<Assistant> Assistants { get; set; }
