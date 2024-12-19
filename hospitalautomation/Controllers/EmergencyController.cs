@@ -29,7 +29,6 @@ namespace hospitalautomation.Controllers
         [HttpGet("EmergencyInfo")]
         public async Task<IActionResult> EmergencyInfo()
         {
-            // Giriş yapan kullanıcının ID'sini alıyoruz
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrEmpty(userId))
@@ -41,9 +40,9 @@ namespace hospitalautomation.Controllers
             int currentUserId = int.Parse(userId);
 
             var emergencies = await _context.MailEmergencies
-                .Where(me => me.UserId == currentUserId) // Kullanıcıya gönderilmiş olanlar
-                .Include(me => me.Emergency) // Emergency bilgilerini dahil et
-                .OrderByDescending(me => me.Emergency.CreatedAt) // Tarihi en yakın olanlar önce gelsin
+                .Where(me => me.UserId == currentUserId) 
+                .Include(me => me.Emergency) 
+                .OrderByDescending(me => me.Emergency.CreatedAt) 
                 .Select(me => new
                 {
                     SenderName = _context.Users.Where(u => u.Id == me.Emergency.UserId).Select(u => u.Email).FirstOrDefault(),
@@ -68,7 +67,7 @@ namespace hospitalautomation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string Title, string Content, DateTime CreationDate, DateTime CreationTime)
         {
-            int userId = 1; // Bu örnekte giriş yapmış kullanıcı yok, sabit verdik.
+            int userId = 1; 
 
             if (string.IsNullOrWhiteSpace(Title) || string.IsNullOrWhiteSpace(Content)
                 || CreationDate == default || CreationTime == default)
@@ -77,7 +76,7 @@ namespace hospitalautomation.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Tarih ve saati birleştir
+           
             DateTime createdAt = new DateTime(CreationDate.Year, CreationDate.Month, CreationDate.Day,
                                               CreationTime.Hour, CreationTime.Minute, CreationTime.Second);
 
@@ -90,9 +89,9 @@ namespace hospitalautomation.Controllers
             };
 
             _context.Emergencies.Add(emergency);
-            await _context.SaveChangesAsync(); // Emergency kaydedildi ve ID elde ettik
+            await _context.SaveChangesAsync(); 
 
-            // Kullanıcıların emaillerini ve Id'lerini çekiyoruz
+            
             var users = await _context.Users
                 .Where(u => !string.IsNullOrEmpty(u.Email))
                 .Select(u => new { u.Id, u.Email })

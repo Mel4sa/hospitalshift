@@ -17,7 +17,7 @@ namespace hospitalautomation.Models
         public int EmergencyId { get; set; }
 
         [ForeignKey("EmergencyId")]
-        public Emergency Emergency { get; set; } // Navigation Property
+        public Emergency Emergency { get; set; } 
 
         [Required]
         [StringLength(500)]

@@ -38,7 +38,7 @@ namespace hospitalautomation.Controllers
         [HttpGet("DepartmantsInfo")]
         public IActionResult DepartmantsInfo()
         {
-            // Departman isimlerini tanımlayalım
+       
             var departmentNames = new List<string>
             {
                 "Çocuk Acil",
@@ -46,12 +46,12 @@ namespace hospitalautomation.Controllers
                 "Çocuk Hematolojisi ve Onkolojisi"
             };
 
-            // Departmanları isimlerine göre çekelim
+      
             var departments = _context.Departments
                 .Where(d => departmentNames.Contains(d.Name))
                 .ToList();
 
-            return View(departments); // View'a model olarak gönderiyoruz
+            return View(departments); 
         }
 
 
@@ -63,9 +63,9 @@ namespace hospitalautomation.Controllers
 
             var dept = _context.Departments.FirstOrDefault(d => d.Name == name);
             if (dept == null)
-                return Json(new { }); // Boş obje dönüyoruz, front-end bunu kontrol eder
+                return Json(new { }); 
 
-            return Json(dept); // Departman bilgilerini JSON olarak dönüyoruz
+            return Json(dept); 
         }
 
         [HttpPost("create-or-update")]
@@ -112,12 +112,12 @@ namespace hospitalautomation.Controllers
                 return Json(new { error = string.Join(" ", validationErrors) });
             }
 
-            // Aynı isme sahip departman var mı diye kontrol et
+        
             var existingDepartment = _context.Departments.FirstOrDefault(d => d.Name == department.Name);
 
             if (existingDepartment != null)
             {
-                // Güncelleme
+ 
                 existingDepartment.PatientCount = department.PatientCount;
                 existingDepartment.EmptybedCount = department.EmptybedCount;
                 existingDepartment.StartTime = department.StartTime;
@@ -125,7 +125,7 @@ namespace hospitalautomation.Controllers
             }
             else
             {
-                // Yeni oluşturma
+               
                 _context.Departments.Add(department);
             }
 

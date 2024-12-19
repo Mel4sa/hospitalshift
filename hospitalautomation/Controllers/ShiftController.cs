@@ -27,10 +27,10 @@ namespace hospitalautomation.Controllers
         [HttpGet("ShiftInfo")]
         public async Task<IActionResult> ShiftInfo()
         {
-            // Giriş yapan kullanıcının ID'sini alıyoruz
+ 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // UserId'ye göre Assistant'ı buluyoruz
+      
             var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.UserId == int.Parse(userId));
             if (assistant == null)
             {
@@ -38,13 +38,13 @@ namespace hospitalautomation.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Assistant'a ait nöbetleri çekiyoruz
+      
             var shifts = await _context.Shifts
                 .Where(s => s.AssistantId == assistant.Id)
-                .Include(s => s.Department) // Department bilgilerini de dahil ediyoruz
+                .Include(s => s.Department) 
                 .ToListAsync();
 
-            return View("ShiftInfo", shifts); // ShiftInfo view'ine gönderiyoruz
+            return View("ShiftInfo", shifts); 
         }
 
         [HttpGet("")]
@@ -75,7 +75,7 @@ namespace hospitalautomation.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Aynı asistana, aynı gün nöbet var mı?
+            
             bool alreadyAssigned = await _context.Shifts.AnyAsync(s =>
                 s.AssistantId == assistantId &&
                 s.ShiftDate.Date == shiftDate.Date

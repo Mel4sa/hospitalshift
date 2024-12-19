@@ -12,12 +12,12 @@ namespace hospitalautomation.Controllers
     public class UserController : Controller
     {
         private readonly ILogger<UserController> _logger;
-        private readonly ApplicationDbContext _context; // DbContext'i enjekte ettik
+        private readonly ApplicationDbContext _context; 
 
         public UserController(ILogger<UserController> logger, ApplicationDbContext context)
         {
             _logger = logger;
-            _context = context; // DbContext'i constructor ile alıyoruz
+            _context = context; 
         }
 
 
@@ -25,7 +25,7 @@ namespace hospitalautomation.Controllers
         public async Task<IActionResult> Instructortable()
         {
             var instructors = await _context.Instructors
-               .Where(a => !a.IsDeleted) // IsDeleted = false olanlar
+               .Where(a => !a.IsDeleted) 
                .ToListAsync();
 
             return View(instructors);
@@ -55,7 +55,7 @@ namespace hospitalautomation.Controllers
         public async Task<IActionResult> Assistantable()
         {
             var assistants = await _context.Assistants
-                .Where(a => !a.IsDeleted) // IsDeleted = false olanlar
+                .Where(a => !a.IsDeleted) 
                 .ToListAsync();
 
             return View(assistants);
@@ -136,7 +136,7 @@ namespace hospitalautomation.Controllers
                             Email = userDto.Email,
                             Address = userDto.Address,
                             TelNo = userDto.TelNo,
-                            DepartmentId = userDto.DepartmentId.Value // Nullable int'i int'e çeviriyoruz.
+                            DepartmentId = userDto.DepartmentId.Value
                         };
 
                         _context.Instructors.Add(instructor);
@@ -186,14 +186,14 @@ namespace hospitalautomation.Controllers
                         ? _context.Assistants.FirstOrDefault(a => a.UserId == user.Id)?.TelNo
                         : _context.Instructors.FirstOrDefault(i => i.UserId == user.Id)?.TelNo,
             }).ToList();
-            // Departmanları çekiyoruz
+           
             var departments = await _context.Departments
                 .Where(d => !d.IsDeleted)
                 .Select(d => new { d.Id, d.Name })
                 .ToListAsync();
 
             ViewBag.Departments = departments;
-            return View(userDtos); // UserDto türünde model gönderiliyor.
+            return View(userDtos); 
         }
         [HttpPost("delete")]
         public async Task<IActionResult> DeleteUser(int userId)
@@ -201,24 +201,24 @@ namespace hospitalautomation.Controllers
             var user = await _context.Users.FindAsync(userId);
             if (user != null)
             {
-                // Kullanıcıyı pasif yap (IsDeleted = true)
+              
                 user.IsDeleted = true;
 
-                // Assistants tablosunda kullanıcıya ait veriyi güncelle
+               
                 var assistants = _context.Assistants.Where(a => a.UserId == userId);
                 foreach (var assistant in assistants)
                 {
                     assistant.IsDeleted = true;
                 }
 
-                // Instructors tablosunda kullanıcıya ait veriyi güncelle
+               
                 var instructors = _context.Instructors.Where(i => i.UserId == userId);
                 foreach (var instructor in instructors)
                 {
                     instructor.IsDeleted = true;
                 }
 
-                // Veritabanındaki değişiklikleri kaydet
+                
                 await _context.SaveChangesAsync();
 
                 TempData["Message"] = "Kullanıcı başarıyla silindi!";
@@ -239,7 +239,7 @@ namespace hospitalautomation.Controllers
                 return NotFound("Kullanıcı bulunamadı.");
             }
 
-            // Role'e göre veri al
+           
             if (user.Role == UserRole.Asistan)
             {
                 var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.UserId == userId);
@@ -287,12 +287,12 @@ namespace hospitalautomation.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Kullanıcı bilgilerini güncelle
+      
             user.Email = userDto.Email;
             user.Password = userDto.Password;
             user.Role = userDto.Role;
 
-            // Role'e göre tablo güncelle
+      
             if (user.Role == UserRole.Asistan)
             {
                 var assistant = await _context.Assistants.FirstOrDefaultAsync(a => a.UserId == userDto.Id);

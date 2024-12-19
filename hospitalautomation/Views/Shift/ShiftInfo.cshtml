@@ -20,12 +20,12 @@
             height: 100%;
         }
 
-        /* Takvimi ortalamak için ayar */
+  
         .calendar-container {
-            margin: 40px auto; /* Takvimi biraz daha yukarı al */
-            width: 100%; /* Takvimi ekran genişliğine göre ayarla */
-            max-width: 1200px; /* Maksimum genişlik */
-            overflow-x: hidden; /* Yan kaydırma çubuğu engellenir */
+            margin: 40px auto; 
+            width: 100%; 
+            max-width: 1200px; 
+            overflow-x: hidden; 
         }
 
         .calendar {
@@ -47,10 +47,10 @@
             border: 1px solid #e0e0e0;
             text-align: left;
             vertical-align: top;
-            padding: 5px; /* Padding artırıldı */
+            padding: 5px;
             position: relative;
-            width: 14.28%; /* 7 sütun için eşit genişlik */
-            height: 80px; /* Boyu biraz büyütüldü */
+            width: 14.28%; 
+            height: 80px; 
             background-color: #ffffff;
             transition: background-color 0.2s ease;
         }
@@ -65,21 +65,21 @@
             left: 2px;
             font-weight: bold;
             color: #333;
-            font-size: 10px; /* Yazı boyutu küçültüldü */
+            font-size: 10px; 
         }
 
         .calendar .shift {
             margin-top: 5px;
-            font-size: 10px; /* Yazı boyutu küçültüldü */
+            font-size: 10px; 
             background-color: #d9f9d9;
             padding: 2px 4px;
             border-radius: 4px;
             text-align: center;
         }
 
-        /* Nöbet bilgisi stil */
+
         .shift-detail {
-            font-size: 10px; /* Nöbet bilgisi yazısı daha küçük */
+            font-size: 10px; 
             color: #333;
             font-weight: bold;
         }
@@ -88,14 +88,14 @@
             display: block;
         }
 
-        /* Takvim başlığı */
+
         .calendar-header {
             text-align: center;
             margin-bottom: 20px;
             color: white;
         }
 
-        /* Butonlar */
+        
         .nav-buttons {
             display: flex;
             justify-content: space-between;
@@ -103,14 +103,14 @@
         }
         
         .nav-buttons button {
-            font-size: 16px; /* Buton fontu biraz küçültüldü */
+            font-size: 16px; 
             padding: 8px 16px;
             margin: 5px;
         }
 
-        /* 2025 yılı yazısını butonlar arasına yerleştirmek için */
+       
         .year-display {
-            font-size: 20px; /* Yıl yazısının boyutu biraz küçültüldü */
+            font-size: 20px; 
             color: white;
             font-weight: bold;
         }
@@ -138,7 +138,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Takvim burada dinamik olarak doldurulacak -->
+
         </tbody>
     </table>
 </div>
@@ -152,7 +152,7 @@
         "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
     ];
 
-    // Model'den gelen nöbet bilgilerini JS'e aktarıyoruz
+   
     const shifts = @Html.Raw(Json.Serialize(Model.Select(s => new {
         day = s.ShiftDate.Day,
         department = s.Department.Name,
@@ -189,7 +189,7 @@
             const td = document.createElement('td');
             td.textContent = day;
 
-            // Günlere nöbet bilgilerini yerleştir
+         
             const shiftDetails = shifts.filter(s => s.day === day);
             shiftDetails.forEach(shift => {
                 const shiftDiv = document.createElement('div');

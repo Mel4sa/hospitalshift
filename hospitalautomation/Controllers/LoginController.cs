@@ -35,23 +35,23 @@ namespace hospitalautomation.Controllers
 
                 if (user != null && user.Password == model.Password)
                 {
-                    // Kullanıcı bilgilerini Claims ile sakla
+            
                     var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Kullanıcı ID'si
-                new Claim(ClaimTypes.Email, user.Email), // Kullanıcı E-posta
-                new Claim(ClaimTypes.Role, user.Role.ToString()) // Kullanıcı Rolü
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString()) 
             };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     var authProperties = new AuthenticationProperties
                     {
-                        IsPersistent = true, // Kalıcı oturum
-                        ExpiresUtc = DateTime.UtcNow.AddHours(1) // Oturum süresi
+                        IsPersistent = true,
+                        ExpiresUtc = DateTime.UtcNow.AddHours(1) 
                     };
 
-                    // Oturum başlat
+                   
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
                     TempData["Message"] = "Giriş başarılı!";
@@ -66,49 +66,47 @@ namespace hospitalautomation.Controllers
             return View("Index", model);
         }
 
-        // Admin giriş sayfası (GET)
+
         [HttpGet]
         public IActionResult LoginByAdmin()
         {
-            // Admin login sayfasını döndür
             return View();
         }
 
-        // Admin giriş kontrolü (POST)
        [HttpPost]
         public IActionResult LoginByAdmin(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Kullanıcıyı ve rolünü kontrol et
+
                 var user = _context.Users
                     .FirstOrDefault(u => u.Email == model.Email &&
                                         u.Password == model.Password &&
-                                        u.Role == UserRole.Admin);  // UserRole.Admin enum kontrolü
+                                        u.Role == UserRole.Admin);  
 
                 if (user != null)
                 {
-                    // Admin bilgilerini Claims ile sakla
+                 
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Kullanıcı ID'si
-                        new Claim(ClaimTypes.Email, user.Email),                 // Kullanıcı E-posta
-                        new Claim(ClaimTypes.Role, user.Role.ToString())         // Kullanıcı Rolü (Admin)
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
+                        new Claim(ClaimTypes.Email, user.Email),           
+                        new Claim(ClaimTypes.Role, user.Role.ToString())         
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     var authProperties = new AuthenticationProperties
                     {
-                        IsPersistent = true,                       // Kalıcı oturum
-                        ExpiresUtc = DateTime.UtcNow.AddHours(1)   // Oturum süresi
+                        IsPersistent = true,                 
+                        ExpiresUtc = DateTime.UtcNow.AddHours(1)  
                     };
 
-                    // Oturum başlat
+                 
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
                     TempData["Message"] = "Admin Girişi Başarılı!";
-                    return RedirectToAction("Index", "AdminHome");  // AdminHome controller'ındaki Index action'ına yönlendir
+                    return RedirectToAction("Index", "AdminHome");  
                 }
                 else
                 {
@@ -116,12 +114,12 @@ namespace hospitalautomation.Controllers
                 }
             }
 
-            return View("LoginByAdmin", model);  // Admin giriş sayfasına geri döner
+            return View("LoginByAdmin", model);  
         }
 
     }
 
-    // Giriş modeli
+
     public class LoginViewModel
     {
         public required string Email { get; set; }

@@ -19,13 +19,13 @@
     }
 
     .card-header {
-        background: linear-gradient(to right, #8B0000, #FF6347); /* Koyu kırmızıdan açık kırmızıya geçiş */
+        background: linear-gradient(to right, #8B0000, #FF6347); 
         color: white;
         padding: 20px;
     }
 
     .btn-danger {
-        background: linear-gradient(to right, #8B0000, #FF6347); /* Koyu kırmızıdan açık kırmızıya geçiş */
+        background: linear-gradient(to right, #8B0000, #FF6347); 
         border-color: #8B0000;
         color: white;
         transition: background 0.3s ease;
@@ -33,7 +33,7 @@
     }
 
     .btn-danger:hover {
-        background: linear-gradient(to right, #FF6347, #8B0000); /* Hoverda renk geçişi tersine döner */
+        background: linear-gradient(to right, #FF6347, #8B0000); 
         border-color: #FF6347;
         color: white;
     }
@@ -61,7 +61,7 @@
 
 <div class="container mt-5">
     <div class="card shadow">
-        <!-- Form Başlığı -->
+
         <div class="card-header">
             <h3 class="mb-0 text-center">Acil Durum Ekle</h3>
         </div>
@@ -73,25 +73,25 @@
                     <input type="text" class="form-control" id="Title" name="Title" placeholder="Başlık giriniz" required>
                 </div>
 
-                <!-- İçerik Alanı -->
+   
                 <div class="form-group">
                     <label for="Content" class="form-label">İçerik</label>
                     <textarea class="form-control" id="Content" name="Content" rows="4" placeholder="Acil durum açıklamasını giriniz" required></textarea>
                 </div>
 
-                <!-- Oluşturulma Tarihi -->
+   
                 <div class="form-group">
                     <label for="CreationDate" class="form-label">Oluşturulma Tarihi</label>
                     <input type="date" class="form-control" id="CreationDate" name="CreationDate" required>
                 </div>
 
-                <!-- Oluşturulma Saati -->
+             
                 <div class="form-group">
                     <label for="CreationTime" class="form-label">Oluşturulma Saati</label>
                     <input type="time" class="form-control" id="CreationTime" name="CreationTime" required>
                 </div>
 
-                <!-- Gönder Butonu -->
+           
                 <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-danger">Gönder</button>
                 </div>

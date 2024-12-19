@@ -143,7 +143,7 @@
                     onclick="saveDepartment('detailsModal1', 1)">Kaydet</button>
             </div>
             <div class="container mt-4">
-    <!-- Hata Mesajı -->
+
     @if (TempData["Error"] != null)
     {
         <div class="alert alert-danger">
@@ -151,7 +151,7 @@
         </div>
     }
 
-    <!-- Başarı Mesajı -->
+  
     @if (TempData["Success"] != null)
     {
         <div class="alert alert-success">
@@ -160,7 +160,7 @@
     }
 </div>
 
-<!-- Geri kalan HTML kodlar -->
+
 
         </div>
     </div>
@@ -209,7 +209,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="detailsModalLabel3">Çocuk Hematolojisi ve Onkolojisi</h5>
-                <!-- Departman İsmi -->
+            
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -247,27 +247,27 @@
     function openModal(modalId, departmentName) {
     const modal = document.getElementById(modalId);
 
-    // Departman verisini çek
+
     fetch('/Departman/get-department?name=' + encodeURIComponent(departmentName))
     .then(response => response.json())
     .then(data => {
-        // data boş obje ise yeni kayıt, dolu ise update
+
         const patientCountInput = modal.querySelector('[name="patientsCount"]');
         const emptyBedsInput = modal.querySelector('[name="emptyBeds"]');
         const startTimeInput = modal.querySelector('[name="workingHoursStart"]');
         const endTimeInput = modal.querySelector('[name="workingHoursEnd"]');
 
         if (Object.keys(data).length === 0) {
-            // Yeni kayıt
+  
             patientCountInput.value = '';
             emptyBedsInput.value = '';
             startTimeInput.value = '';
             endTimeInput.value = '';
         } else {
-            // Var olan kaydı doldur
+         
             patientCountInput.value = data.patientCount;
             emptyBedsInput.value = data.emptybedCount;
-            startTimeInput.value = data.startTime; // Timespan "HH:mm:ss" gelecektir, parse edin gerekirse
+            startTimeInput.value = data.startTime; 
             endTimeInput.value = data.endTime;
         }
 
@@ -290,7 +290,7 @@ function saveDepartment(modalId) {
     const endTime = modal.querySelector(`[name="workingHoursEnd"]`).value;
 
     const department = {
-        // id: gerek yok, name üzerinden gideceğiz
+    
         name: name.trim(),
         patientCount: parseInt(patientCount),
         emptybedCount: parseInt(emptyBedCount),

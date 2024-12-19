@@ -10,24 +10,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index - Hospital Automation</title>
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
-        /* Sayfa Arka Planı */
+       
         body {
             background-color: #e0f7fa;
-            /* Soft pastel mavi */
+          
             font-family: Arial, sans-serif;
         }
 
         .card {
             border-radius: 20px;
             min-height: 350px;
-            /* Daha uzun kartlar */
+          
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -44,12 +44,12 @@
             font-size: 16px;
         }
 
-        /* Görüntüle butonunun focus durumunda mavi çizgiyi kaldırıyoruz */
+   
         .btn-primary:focus {
             outline: none;
             box-shadow: none;
             border: none;
-            /* Mavi çizgiyi tamamen kaldırmak için */
+     
         }
 
         .btn-primary:hover {
@@ -109,12 +109,12 @@
 
         .row {
             gap: 50px;
-            /* Kartlar arasındaki mesafe */
+     
         }
 
         .card-body {
             padding: 50px 30px;
-            /* Kartların içeriği için daha fazla boşluk */
+           
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -123,17 +123,17 @@
 
         .icon {
             font-size: 40px;
-            /* İkonların boyutunu büyütme */
+  
             margin-bottom: 20px;
-            /* İkon ile metin arasında boşluk */
+         
         }
 
         .modal-body label {
             font-weight: bold;
-            /* Yazıyı kalın yap */
+         
             font-size: 18px;
             color: #000000;
-            /* Siyah renk */
+      
         }
 
         .modal-body select,
@@ -145,7 +145,7 @@
             margin-top: 10px;
         }
 
-        /* Mavi çizgiyi kaldırmak için focus stilini ekliyoruz */
+
         .btn-success:focus {
             outline: none;
             box-shadow: none;
@@ -153,53 +153,53 @@
 
         .modal-dialog {
             max-width: 800px;
-            /* Daha geniş modal */
+           
         }
 
-        /* Tabloyu modal ile uyumlu hale getirelim */
+        
         .modal-body table {
             width: 100%;
             font-size: 16px;
         }
 
-        /* Tablo Satır ve Sütun Çizgilerini Belirgin Yapma */
+     
         .table th,
         .table td {
             border: 2px solid black;
-            /* Siyah renkli çizgiler */
+         
         }
 
         .table th {
             background-color: #f8f9fa;
-            /* Başlık hücrelerine daha açık bir arka plan rengi */
+         
             font-weight: bold;
-            /* Başlıkları kalın yap */
+    
         }
 
         .table td {
             background-color: #ffffff;
-            /* Veri hücrelerinin beyaz arka planı */
+           
         }
 
         .table tr:hover {
             background-color: #f1f1f1;
-            /* Satır üzerine gelindiğinde renk değişimi */
+           
         }
 
         .modal-footer button {
             width: 48%;
             height: 50px;
-            /* Butonları daha yüksek yapmak */
+     
             padding: 0;
-            /* İçerik boşluklarını kaldırıyoruz */
+       
             font-size: 16px;
-            /* Font büyüklüğünü standart yapıyoruz */
+      
         }
 
-        /* "İptal Et" butonunun görünümünü düzeltmek için */
+      
         .btn-danger {
             white-space: nowrap;
-            /* Yazının altlı üstlü olmasını engeller */
+    
         }
     </style>
 </head>
@@ -207,8 +207,7 @@
 <body>
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="row justify-content-center">
-            <!-- Randevuları Görüntüle Kartı -->
-                <!-- Randevuları Görüntüle Kartı (Sadece Instructor için) -->
+          
                 <div class="col-lg-5 col-md-6 d-flex">
                     <div class="card shadow-lg border-0 w-100">
                         <div class="card-body">
@@ -222,7 +221,7 @@
                     </div>
                 </div>
 
-            <!-- Randevu Al Kartı -->
+         
             <div class="col-lg-5 col-md-6 d-flex">
                 <div class="card shadow-lg border-0 w-100">
                     <div class="card-body">
@@ -331,13 +330,13 @@
     </select>
 </div>
 
-<!-- Departman Bilgisi -->
+
 <div class="mb-3">
     <label for="department" class="form-label">Departman</label>
     <input type="text" id="department" class="form-control" readonly />
 </div>
 
-    <!-- Tarih Seçimi -->
+
     <div class="mb-3">
         <label for="randevuTarihi" class="form-label">Randevu Tarihini Seçin</label>
         <input type="date" class="form-control" id="randevuTarihi" name="ShiftDate"
@@ -345,8 +344,7 @@
                required>
     </div>
 
-    <!-- Saat Aralığı Seçimi -->
- <!-- Başlangıç Saati -->
+
                     <div class="mb-3">
                         <label for="startTime" class="form-label">Başlangıç Saati</label>
                         <input type="time" class="form-control" id="startTime" name="StartTime"
@@ -354,7 +352,7 @@
                                required>
                     </div>
 
-                    <!-- Bitiş Saati -->
+                   
                     <div class="mb-3">
                         <label for="endTime" class="form-label">Bitiş Saati</label>
                         <input type="time" class="form-control" id="endTime" name="EndTime"
@@ -362,7 +360,7 @@
                                required>
                     </div>
 
-    <!-- Kaydet Butonu -->
+
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
         <button type="submit" class="btn btn-success">Kaydet</button>

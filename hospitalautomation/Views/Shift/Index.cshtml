@@ -8,17 +8,17 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between mb-4">
         <h2 class="text-primary">Nöbetler</h2>
-        <!-- Nöbet Ekle Butonu -->
+
         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addShiftModal">Nöbet Ekle</button>
     </div>
 
-    <!-- Hata Mesajı -->
+  
     @if (TempData["Error"] != null)
     {
         <div class="alert alert-danger">@TempData["Error"]</div>
     }
 
-    <!-- Başarı Mesajı -->
+  
     @if (TempData["Success"] != null)
     {
         <div class="alert alert-success">@TempData["Success"]</div>
@@ -46,10 +46,10 @@
                     <td>@shift.StartTime.ToString("HH:mm")</td>
                     <td>@shift.EndTime.ToString("HH:mm")</td>
                     <td>
-                        <!-- Güncelle Butonu (modal açabilir veya ayrı sayfaya yönlendirebilirsiniz) -->
+                       
                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateShiftModal@shift.Id">Güncelle</button>
 
-                        <!-- Sil Butonu -->
+                       
                         <form action="/Shift/delete" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@shift.Id" />
@@ -58,7 +58,7 @@
                     </td>
                 </tr>
 
-                <!-- Güncelle Modal -->
+               
                 <div class="modal fade" id="updateShiftModal@shift.Id" tabindex="-1" aria-labelledby="updateShiftModalLabel@shift.Id" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -126,7 +126,7 @@
     </div>
 </div>
 
-<!-- Nöbet Ekle Modal -->
+
 <div class="modal fade" id="addShiftModal" tabindex="-1" aria-labelledby="addShiftModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -137,7 +137,7 @@
             <div class="modal-body">
                 <form action="/Shift/add" method="post">
                     @Html.AntiForgeryToken()
-                    <!-- Asistan Seçimi -->
+             
                     <div class="mb-3">
                         <label for="assistant" class="form-label" style="color: #4e73df;">Asistan Seçimi</label>
                         <select class="form-select" id="assistant" name="assistantId" required>
@@ -149,7 +149,7 @@
                         </select>
                     </div>
 
-                    <!-- Bölüm Seçimi -->
+         
                     <div class="mb-3">
                         <label for="department" class="form-label" style="color: #4e73df;">Bölüm Seçimi</label>
                         <select class="form-select" id="department" name="departmentId" required>
@@ -161,19 +161,19 @@
                         </select>
                     </div>
 
-                    <!-- Nöbet Tarihi -->
+                
                     <div class="mb-3">
                         <label for="shiftDate" class="form-label" style="color: #4e73df;">Nöbet Tarihi</label>
                         <input type="date" class="form-control" id="shiftDate" name="shiftDate" required>
                     </div>
 
-                    <!-- Başlangıç Saati -->
+                    
                     <div class="mb-3">
                         <label for="startTime" class="form-label" style="color: #4e73df;">Başlangıç Saati</label>
                         <input type="time" class="form-control" id="startTime" name="startTime" required>
                     </div>
 
-                    <!-- Bitiş Saati -->
+                 
                     <div class="mb-3">
                         <label for="endTime" class="form-label" style="color: #4e73df;">Bitiş Saati</label>
                         <input type="time" class="form-control" id="endTime" name="endTime" required>

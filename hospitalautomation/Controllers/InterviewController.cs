@@ -83,7 +83,7 @@ namespace hospitalautomation.Controllers
                 }
 
                 interviews = _context.Interviews
-                    .Where(i => i.InstructorId == instructor.Id && !i.IsDeleted && i.ShiftDate >= today) // Bugünden sonraki kayıtlar
+                    .Where(i => i.InstructorId == instructor.Id && !i.IsDeleted && i.ShiftDate >= today) 
                     .OrderBy(i => i.ShiftDate)
                     .ToList();
             }
@@ -97,7 +97,7 @@ namespace hospitalautomation.Controllers
                 }
 
                 interviews = _context.Interviews
-                    .Where(i => i.AssistantId == assistant.Id && !i.IsDeleted && i.ShiftDate >= today) // Bugünden sonraki kayıtlar
+                    .Where(i => i.AssistantId == assistant.Id && !i.IsDeleted && i.ShiftDate >= today)
                     .OrderBy(i => i.ShiftDate)
                     .ToList();
             }
