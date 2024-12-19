@@ -107,7 +107,7 @@ namespace hospitalautomation.Controllers
                 return BadRequest("Geçersiz kullanıcı rolü.");
             }
 
-            // Kullanıcıya ait zamanı geçmemiş randevuyu getir
+            
             var futureInterview = interviews.FirstOrDefault();
             ViewBag.FutureInterview = futureInterview;
 
@@ -136,7 +136,7 @@ namespace hospitalautomation.Controllers
             return View("Error!");
         }
 
-        // Randevu Alma İşlemi
+     
         [HttpPost("CreateInterview")]
         public IActionResult CreateInterview(int instructorId, DateTime shiftDate, DateTime startTime, DateTime endTime)
         {
@@ -144,7 +144,7 @@ namespace hospitalautomation.Controllers
             if (string.IsNullOrEmpty(userId))
                 return RedirectToAction("Index", "Login");
 
-            // Assistant doğrulama
+            
             var assistant = _context.Assistants.FirstOrDefault(a => a.UserId == int.Parse(userId));
             if (assistant == null)
             {
@@ -152,7 +152,7 @@ namespace hospitalautomation.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Instructor doğrulama
+      
             var instructor = _context.Instructors.FirstOrDefault(i => i.Id == instructorId && !i.IsDeleted);
             if (instructor == null)
             {
@@ -160,13 +160,13 @@ namespace hospitalautomation.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Mevcut randevuyu bul
+ 
             var existingInterview = _context.Interviews
                 .FirstOrDefault(i => i.AssistantId == assistant.Id && i.ShiftDate >= DateTime.Today);
 
             if (existingInterview != null)
             {
-                // Mevcut randevuyu güncelle
+            
                 existingInterview.InstructorId = instructorId;
                 existingInterview.ShiftDate = shiftDate;
                 existingInterview.StartTime = startTime;
@@ -179,7 +179,7 @@ namespace hospitalautomation.Controllers
             }
             else
             {
-                // Yeni randevu oluştur
+ 
                 var newInterview = new Interview
                 {
                     AssistantId = assistant.Id,
@@ -198,7 +198,7 @@ namespace hospitalautomation.Controllers
             return RedirectToAction("Index");
         }
 
-        // Randevu İptali
+    
         [HttpPost("CancelInterview")]
         public IActionResult CancelInterview(int interviewId)
         {

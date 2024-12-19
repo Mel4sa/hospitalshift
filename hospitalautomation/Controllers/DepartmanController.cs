@@ -71,7 +71,7 @@ namespace hospitalautomation.Controllers
         [HttpPost("create-or-update")]
         public async Task<IActionResult> CreateOrUpdate()
         {
-            // Request body'yi oku
+          
             string body;
             using (var reader = new StreamReader(Request.Body))
             {
